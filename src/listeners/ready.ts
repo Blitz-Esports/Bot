@@ -1,10 +1,13 @@
 import type { ListenerOptions, PieceContext } from '@sapphire/framework';
 import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
+import type { Sequelize } from 'sequelize/dist';
+import { initializeDatabase } from '../lib/database/main';
 
 const dev = process.env.NODE_ENV !== 'production';
 
 export class ReadyEvent extends Listener {
+
     private readonly style = dev ? yellow : blue;
 
     public constructor(context: PieceContext, options?: ListenerOptions) {
@@ -14,12 +17,15 @@ export class ReadyEvent extends Listener {
         });
     }
 
-    public run() {
+    public async run() {
         this.printBanner();
         this.printStoreDebugInformation();
 
-        // Unloads and loads the listeners again
-        this.refreshListeners();
+        //* Load modules
+        await this.initializeDatabase();
+
+        //* Unloads and loads the listeners again
+        this.reloadListeners();
     }
 
     private printBanner() {
@@ -51,7 +57,19 @@ export class ReadyEvent extends Listener {
         return gray(`${last ? '└─' : '├─'} Loaded ${this.style(store.size.toString().padEnd(3, ' '))} ${store.name}.`);
     }
 
-    private refreshListeners() {
+    private reloadListeners() {
         this.container.stores.get('listeners').loadAll();
+    }
+
+    private async initializeDatabase() {
+        const database = await initializeDatabase();
+        this.container.database = database;
+    }
+
+}
+
+declare module '@sapphire/pieces' {
+    interface Container {
+        database: Sequelize
     }
 }

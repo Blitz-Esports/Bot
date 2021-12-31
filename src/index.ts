@@ -11,7 +11,8 @@ const client = new SapphireClient({
     },
     shards: 'auto',
     intents: config.bot.intents as BitFieldResolvable<IntentsString, number>,
-    partials: config.bot.partials as PartialTypes[]
+    partials: config.bot.partials as PartialTypes[],
+    api: config.server.api
 });
 
 const main = async () => {
