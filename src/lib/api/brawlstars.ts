@@ -303,7 +303,7 @@ export const generateBrawlerListCard = async function (player: APlayer) {
             imageWidth: 100,
             imageHeight: 100,
             spacing: 2,
-            backgroundColor: "#343a40",
+            backgroundColor: "#000000",
         });
         return card.toBuffer();
     }));

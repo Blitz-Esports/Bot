@@ -18,5 +18,5 @@ export const list = (club: AClub, role: "member" | "senior" | "vicePresident" | 
     let r = [role];
     if (role === "vicePresident") r = ["president", role]
     const list = club.members.filter((x) => r.includes(x.role)).sort((a, b) => b.trophies - a.trophies).map((m) => `${brawlstarsEmojis.role[m.role] || brawlstarsEmojis.unknown}\`${m.trophies}\` [${m.name}](https://brawlify.com/stats/profile/${m.tag.replace("#", "")})`).slice(0, 5)
-    return list;
+    return list.length === 0 ? ["- None -"] : list;
 }
