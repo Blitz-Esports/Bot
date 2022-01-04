@@ -1,9 +1,9 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, ListenerOptions } from '@sapphire/framework';
 import type { Message, PermissionResolvable } from 'discord.js';
-import config from '../../../config';
-import { detectNsfw } from '../../../lib/api/antiNsfw';
-const { antiNsfw } = config.features;
+import config from '../../../../config';
+import { detectNsfw } from '../../../../lib/api/antiNsfw';
+const { antiNsfw } = config.features.automod;
 
 @ApplyOptions<ListenerOptions>({
     name: "antiNsfw:messageHandler",

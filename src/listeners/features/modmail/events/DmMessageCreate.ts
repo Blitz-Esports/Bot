@@ -17,13 +17,13 @@ export class UserEvent extends Listener {
             await thread.send({ ...this.makeUserMessageEmbed(message) });
             await message.react(modmail.emojis.success);
         } else if (!thread) {
-            const newUserThread = await modmailChannel.threads.create({
+            const pingMessage = await modmailChannel.send({ content: modmail.pingRoles.map((roleId) => `<@&${roleId}>`).join(', ') });
+            const newUserThread = await pingMessage.startThread({
                 name: message.author.id,
                 autoArchiveDuration: ThreadAutoArchiveDuration.OneDay,
                 reason: `Modmail thread: ${message.author.id} | ${moment().format('DD/MM/YYYY')}`
             });
             this.container.client.emit(modmail.events.SessionStart, message.author, newUserThread);
-            await modmailChannel.send({ content: modmail.pingRoles.map((roleId) => `<@&${roleId}>`).join(', ') });
             await newUserThread.send({ ...this.makeUserMessageEmbed(message) });
             await message.react(modmail.emojis.success);
         }

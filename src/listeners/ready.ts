@@ -3,6 +3,7 @@ import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
 import type { Sequelize } from 'sequelize/dist';
 import { initializeDatabase } from '../lib/database/main';
+import { loadWorkers } from '../lib/workers/loadWorkers';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -23,6 +24,7 @@ export class ReadyEvent extends Listener {
 
         //* Load modules
         await this.initializeDatabase();
+        loadWorkers();
 
         //* Unloads and loads the listeners again
         this.reloadListeners();

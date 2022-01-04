@@ -20,6 +20,7 @@ const main = async () => {
         client.logger.info('Logging in');
         await client.login(config.bot.token);
         client.logger.info('logged in');
+
     } catch (error) {
         client.logger.fatal(error);
         client.destroy();

@@ -13,4 +13,8 @@ export const failEmbed = (content: string) => {
 
 export const warnEmbed = (content: string) => {
     return new MessageEmbed().setColor(colors.warn as ColorResolvable).setDescription(`${emojis.warn} | ${content}`);
+};
+
+export const loadingEmbed = (content: string) => {
+    return new MessageEmbed().setColor(colors.theme as ColorResolvable).setDescription(`${emojis.loading} | ${content}`);
 }; 

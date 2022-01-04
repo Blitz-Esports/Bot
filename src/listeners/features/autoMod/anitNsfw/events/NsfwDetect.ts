@@ -2,11 +2,11 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { Message, MessageActionRow, MessageButton } from 'discord.js';
 import { nanoid } from 'nanoid';
-import config from '../../../../config';
-import type { AntiNsfw } from '../../../../lib/api/antiNsfw';
-import { warnEmbed } from '../../../../lib/constants/embed';
+import config from '../../../../../config';
+import type { AntiNsfw } from '../../../../../lib/api/antiNsfw';
+import { warnEmbed } from '../../../../../lib/constants/embed';
 
-const { antiNsfw } = config.features;
+const { antiNsfw } = config.features.automod;
 
 @ApplyOptions<ListenerOptions>({
     name: "antiNsfw:nsfwDetect",

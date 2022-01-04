@@ -23,7 +23,7 @@ export class UserEvent extends Listener {
                     .setThumbnail(author.displayAvatarURL({ dynamic: true }))
                     .setAuthor({ name: `${author.tag} (${author.id})`, iconURL: author.displayAvatarURL({ dynamic: true }) })
                     .addField('Created At', `${moment(author.createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a')}`)
-                    .setFooter(`${author.tag}`, author.displayAvatarURL({ dynamic: true }))
+                    .setFooter({ text: `${author.tag}`, iconURL: author.displayAvatarURL({ dynamic: true }) })
                     .setTimestamp()
             ],
             components: [
