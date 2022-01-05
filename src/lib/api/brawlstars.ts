@@ -215,7 +215,9 @@ export const generateBrawlerCard = async (brawlerId: number, powerLevel: number,
     ctx.save();
 
     const iGadgets = brawlerInfo.gadgets;
-    const gadgets = brawlerGadgets.map(g => g.id).map(id => iGadgets.find(g => g.id === id));
+    const gadgets = brawlerGadgets.map((gadget) => {
+        return iGadgets.find((sp) => sp.id === gadget.id);
+    });
 
     if (gadgets[0]) {
         const gadgetIconImageSrc = await loadImage(gadgets[0].imageUrl);
@@ -232,8 +234,11 @@ export const generateBrawlerCard = async (brawlerId: number, powerLevel: number,
         ctx.save();
     }
 
+
     const iStarPowers = brawlerInfo.starPowers;
-    const starPowers = brawlerStarPowers.map(s => s.id).map(id => iStarPowers.find(s => s.id === id));
+    const starPowers = brawlerStarPowers.map((starPower) => {
+        return iStarPowers.find((sp) => sp.id === starPower.id);
+    });
 
     if (starPowers[0]) {
         const starPowerIconImageSrc = await loadImage(starPowers[0].imageUrl);
@@ -272,7 +277,7 @@ export const generateBrawlerCard = async (brawlerId: number, powerLevel: number,
     else if (trophies > 9) {
         ctx.fillText(`${trophies}`, 50 + 10, canvas.height - 25.5);
     }
-
+    ctx.save();
     return canvas.toBuffer();
 }
 
@@ -300,8 +305,8 @@ export const generateBrawlerListCard = async function (player: APlayer) {
             sources: bufferChunk,
             width: 8,
             height: 1,
-            imageWidth: 100,
-            imageHeight: 100,
+            imageWidth: 200,
+            imageHeight: 200,
             spacing: 2,
             backgroundColor: "#000000",
         });
@@ -311,7 +316,7 @@ export const generateBrawlerListCard = async function (player: APlayer) {
     return imageCards;
 }
 
-export const splitChunk = (array: any[], chunk?: number) => {
+const splitChunk = (array: any[], chunk?: number) => {
     const inputArray = array;
     var perChunk = chunk || 15;
     var result = inputArray.reduce((resultArray: any[], item: any, index: number) => {
