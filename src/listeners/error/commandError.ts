@@ -18,12 +18,11 @@ export class ErrorEvent extends Listener {
             data: error.stack
         });
 
-        context.interaction[context.interaction.replied ? "editReply" : "reply"]({
+        context.interaction[(context.interaction.replied ? true : context.interaction.deferred) ? "editReply" : "reply"]({
             embeds: [
                 failEmbed(`Something went wrong during the execution of this command.\n**Code**: \`${uId}\``)
             ]
         });
 
     }
-
 }
