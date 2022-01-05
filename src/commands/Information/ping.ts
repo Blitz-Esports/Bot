@@ -9,7 +9,7 @@ import type { CommandInteraction } from 'discord.js';
 export class PingCommand extends Command {
 
     public override async chatInputRun(interaction: CommandInteraction) {
-
+        
         interaction.reply({
             content: `Pong! Latency is ${this.container.client.ws.ping}ms.`
         });

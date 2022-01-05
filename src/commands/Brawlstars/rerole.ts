@@ -33,7 +33,7 @@ export class ReroleCommand extends Command {
         const rolesToSet = member.roles.cache.filter((role) => ![...Object.values(verification.roles), ...allClubRoles].includes(role.id)).map((role) => role.id);
 
         const successEmbed = new MessageEmbed()
-            .setAuthor({ name: `${interaction.user.tag} | 🏆 ${player.trophies.toLocaleString()}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }), url: `https://brawlify.com/stats/profile/${player.tag.replace("#", "")}` })
+            .setAuthor({ name: `${member.user.tag} | 🏆 ${player.trophies.toLocaleString()}`, iconURL: member.user.displayAvatarURL({ dynamic: true }), url: `https://brawlify.com/stats/profile/${player.tag.replace("#", "")}` })
             .setColor("GREEN")
             .setThumbnail(member.guild.iconURL({ dynamic: true }) ?? member.displayAvatarURL({ dynamic: true }));
 
@@ -52,7 +52,7 @@ export class ReroleCommand extends Command {
             await member.roles.set(rolesToSet);
 
             successEmbed.setDescription([
-                `${newNickname?.displayName ? "Unable to change **Nickname**." : `Nickname changed to **${player.name}**.`}`,
+                `${newNickname?.displayName ? `Nickname changed to **${player.name}**.` : "Unable to change **Nickname**."}`,
                 `Associated with club: **${player.club.name}**.`,
                 `Club tag: **${player.club.tag}**.`,
                 `Roles changed: ${roles.map((role) => `<@&${role}>`).join(", ")}.`,
@@ -69,7 +69,7 @@ export class ReroleCommand extends Command {
             await member.roles.set(rolesToSet);
 
             successEmbed.setDescription([
-                `${newNickname?.displayName ? "Unable to change **Nickname**" : `Nickname changed to **${player.name}**`}.`,
+                `${newNickname?.displayName ? `Nickname changed to **${player.name}**.` : "Unable to change **Nickname**."}`,
                 `Associated with club: **${player.club.name}**.`,
                 `Club tag: **${player.club.tag}**.`,
                 `Roles changed: ${roles.map((role) => `<@&${role}>`).join(", ")}.`,
