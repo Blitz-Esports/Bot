@@ -27,7 +27,7 @@ export class PingCommand extends Command {
                         `Node.js: ${process.version}`
                     ]))
                     .addField("Uptime", this.formatMessage([
-                        `Host: ${ms(process.uptime())}s`,
+                        `Host: ${ms(process.uptime())}`,
                         `Client: ${ms(this.container.client.uptime ?? 0)}`
                     ]))
             ]
@@ -46,7 +46,7 @@ export class PingCommand extends Command {
                 description: this.description
             },
             {
-                guildIds: ['926515822657142825'],
+                guildIds: [this.container.config.bot.guilds.main],
                 behaviorWhenNotIdentical: RegisterBehavior.Overwrite
             }
         );

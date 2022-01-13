@@ -134,7 +134,7 @@ export class DatabasePlayerCommand extends Command {
 
             },
             {
-                guildIds: ['926515822657142825'],
+                guildIds: [this.container.config.bot.guilds.dev],
                 behaviorWhenNotIdentical: RegisterBehavior.Overwrite
             }
         );

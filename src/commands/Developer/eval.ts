@@ -22,7 +22,7 @@ export class EvalCommand extends Command {
         if (!message) return interaction.reply({ embeds: [failEmbed("Unable to resolve the message.")], ephemeral: true });
 
         const code = message.content;
-     
+
         const { result, success, type } = await this.eval(message, code, {
             async: true,
             depth: 0,
@@ -87,7 +87,7 @@ export class EvalCommand extends Command {
                 type: "MESSAGE"
             },
             {
-                guildIds: ["926515822657142825"],
+                guildIds: [this.container.config.bot.guilds.dev],
                 behaviorWhenNotIdentical: RegisterBehavior.Overwrite
             }
         )

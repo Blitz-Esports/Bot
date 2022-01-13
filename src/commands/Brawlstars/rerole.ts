@@ -94,7 +94,7 @@ export class ReroleCommand extends Command {
                 ]
             },
             {
-                guildIds: ['926515822657142825'],
+                guildIds: [this.container.config.bot.guilds.main],
                 behaviorWhenNotIdentical: RegisterBehavior.Overwrite
             }
         );
