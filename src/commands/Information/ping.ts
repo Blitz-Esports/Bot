@@ -1,6 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior } from '@sapphire/framework';
-import type { CommandInteraction } from 'discord.js';
+import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior, version as frameworkVersion } from '@sapphire/framework';
+import { CommandInteraction, MessageEmbed, version } from 'discord.js';
+import ms from 'ms';
 
 @ApplyOptions<CommandOptions>({
     name: "ping",
@@ -9,11 +10,33 @@ import type { CommandInteraction } from 'discord.js';
 export class PingCommand extends Command {
 
     public override async chatInputRun(interaction: CommandInteraction) {
-        
+        if (!this.container.client.user) return;
+
+        const dbConnection = await this.container.database.authenticate().catch(() => null);
+
         interaction.reply({
-            content: `Pong! Latency is ${this.container.client.ws.ping}ms.`
+            embeds: [
+                new MessageEmbed()
+                    .setAuthor({ name: this.container.client.user.tag, iconURL: this.container.client.user.displayAvatarURL() })
+                    .setThumbnail(this.container.client.user.displayAvatarURL())
+                    .addField("Statistics", this.formatMessage([
+                        `WS Latency: ${this.container.client.ws.ping}ms`,
+                        `Database: ${dbConnection === null ? "not connected" : "connected"}`,
+                        `Discord.js: ${version}`,
+                        `Sapphire Framework: ${frameworkVersion}`,
+                        `Node.js: ${process.version}`
+                    ]))
+                    .addField("Uptime", this.formatMessage([
+                        `Host: ${ms(process.uptime())}s`,
+                        `Client: ${ms(this.container.client.uptime ?? 0)}`
+                    ]))
+            ]
         });
 
+    }
+
+    private formatMessage(array: string[]) {
+        return array.map((desc) => `● ${desc}`).join("\n");
     }
 
     public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
