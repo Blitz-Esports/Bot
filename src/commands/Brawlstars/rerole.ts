@@ -25,12 +25,12 @@ export class ReroleCommand extends Command {
         const player = await getPlayer(user.toJSON().tag);
         if (!player) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, could not find a Brawl Stars profile with the tag: **${user.toJSON().tag}**.`)] });
 
-        const clubData = await this.container.database.models.club.findOne({ where: { id: player.club.tag } });
+        const clubData = await this.container.database.models.club.findOne({ where: { id: player.club.tag ?? "undefined" } });
         const allClubRoles = (await this.container.database.models.club.findAll({})).map((club) => club.toJSON().roleId).filter((roleId) => roleId !== null);
 
         const newNickname = await member.setNickname(player.name).catch(() => null);
 
-        const rolesToSet = member.roles.cache.filter((role) => ![...Object.values(verification.roles), ...allClubRoles].includes(role.id)).map((role) => role.id);
+        let rolesToSet = member.roles.cache.filter((role) => ![...Object.values(verification.roles), ...allClubRoles].includes(role.id)).map((role) => role.id);
 
         const successEmbed = new MessageEmbed()
             .setAuthor({ name: `${member.user.tag} | 🏆 ${player.trophies.toLocaleString()}`, iconURL: member.user.displayAvatarURL({ dynamic: true }), url: `https://brawlify.com/stats/profile/${player.tag.replace("#", "")}` })
@@ -48,6 +48,7 @@ export class ReroleCommand extends Command {
                 clubData.toJSON().roleId ?? verification.roles.default
             ];
             rolesToSet.push(...roles);
+            rolesToSet = [...new Set(rolesToSet)];
 
             await member.roles.set(rolesToSet);
 
@@ -55,7 +56,7 @@ export class ReroleCommand extends Command {
                 `${newNickname?.displayName ? `Nickname changed to **${player.name}**.` : "Unable to change **Nickname**."}`,
                 `Associated with club: **${player.club.name}**.`,
                 `Club tag: **${player.club.tag}**.`,
-                `Roles changed: ${roles.map((role) => `<@&${role}>`).join(", ")}.`,
+                `Roles changed: ${[...new Set(roles)].map((role) => `<@&${role}>`).join(", ")}.`,
             ].join("\n"))
 
             return interaction.editReply({ embeds: [successEmbed] });
@@ -65,13 +66,14 @@ export class ReroleCommand extends Command {
                 verification.roles.default
             ];
             rolesToSet.push(...roles);
+            rolesToSet = [...new Set(rolesToSet)];
 
             await member.roles.set(rolesToSet);
 
             successEmbed.setDescription([
                 `${newNickname?.displayName ? `Nickname changed to **${player.name}**.` : "Unable to change **Nickname**."}`,
-                `Associated with club: **${player.club.name}**.`,
-                `Club tag: **${player.club.tag}**.`,
+                `Associated with club: **${player.club.name || "None"}**.`,
+                `Club tag: **${player.club.tag || "None"}**.`,
                 `Roles changed: ${roles.map((role) => `<@&${role}>`).join(", ")}.`,
             ].join("\n"))
 

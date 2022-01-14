@@ -23,6 +23,7 @@ export const buildOverviewEmbed = async () => {
     const totalPresidentRole = allClubs.reduce((acc, club) => acc + club.members.filter((m) => m.role === "president").length, 0);
 
     const clubInfoEmbed = new MessageEmbed(clubOverview.embeds.clubInfo)
+        .setTimestamp()
         .addFields(
             {
                 name: `Total Clubs`,
@@ -58,7 +59,7 @@ export const buildOverviewEmbed = async () => {
 
     const clubListEmbeds: MessageEmbed[] = [];
 
-    splitChunk(allClubs.sort((a, b) => b.trophies - a.trophies), 15).forEach((clubs: AClub[]) => {
+    splitChunk(allClubs.sort((a, b) => b.trophies - a.trophies), 12).forEach((clubs: AClub[]) => {
         const embed = new MessageEmbed(clubOverview.embeds.clubList);
         clubs.forEach((club) => {
             const president = club.members.find((member) => member.role === "president");
@@ -71,7 +72,6 @@ export const buildOverviewEmbed = async () => {
                 `${brawlstarsEmojis.role.president} [${president?.name}](https://brawlify.com/stats/profile/${president?.tag.replace("#", "")})`,
             ]
             embed.addField(club.name, field.join("\n"), true);
-            embed.setTimestamp();
         });
         clubListEmbeds.push(embed);
     });
@@ -87,5 +87,11 @@ export const buildOverviewEmbed = async () => {
             }
         }));
 
-    return { embeds: [clubInfoEmbed, ...clubListEmbeds], components: [new MessageActionRow().setComponents(selectClubMenu)], content: null } as MessageOptions;
+    return [
+        { embeds: [clubInfoEmbed], content: null },
+        ...clubListEmbeds.map((embed, index) => {
+            if (index === clubListEmbeds.length - 1) return { embeds: [embed], content: null, components: [new MessageActionRow().setComponents(selectClubMenu)] };
+            else return { embeds: [embed], content: null };
+        })
+    ] as MessageOptions[];
 }

@@ -18,7 +18,9 @@ export class PingCommand extends Command {
             embeds: [
                 new MessageEmbed()
                     .setAuthor({ name: this.container.client.user.tag, iconURL: this.container.client.user.displayAvatarURL() })
+                    .setColor("NOT_QUITE_BLACK")
                     .setThumbnail(this.container.client.user.displayAvatarURL())
+                    .setDescription("Source Code: [GitHub](https://github.com/Blitz-Esports/Bot)")
                     .addField("Statistics", this.formatMessage([
                         `WS Latency: ${this.container.client.ws.ping}ms`,
                         `Database: ${dbConnection === null ? "not connected" : "connected"}`,

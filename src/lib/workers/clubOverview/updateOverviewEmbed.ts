@@ -11,13 +11,17 @@ export const updateOverviewEmbed = async () => {
 
     const channel = container.client.channels.cache.get(clubOverview.channelId) as TextChannel | undefined;
     if (!channel) return container.logger.debug("Could not find club overview channel");
-    const message = await channel.messages.fetch(clubOverview.messageId);
-    if (!message) return container.logger.debug("Could not find club overview message");
 
+    buildOverviewEmbed;
     setInterval(async () => {
         try {
-            const payload = await buildOverviewEmbed();
-            await message.edit(payload);
+            const payloads = await buildOverviewEmbed();
+            payloads.forEach(async (payload, i) => {
+                if (clubOverview.messages[i]) {
+                    const message = await channel.messages.fetch(clubOverview.messages[i]);
+                    if (message) await message.edit(payload);
+                }
+            });
         } catch (e) { console.log(e) }
     }, clubOverview.updateInterval);
 

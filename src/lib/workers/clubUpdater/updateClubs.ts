@@ -9,7 +9,8 @@ export const updateClub = async () => {
 
     let count = 0;
     setInterval(async () => {
-
+        if (!allClubs[count]) return;
+        
         const clubData: AClub | null = await getClub(allClubs[count].id);
         if (clubData) {
             const clubLogs = await clubLogHandler(allClubs[count], clubData);

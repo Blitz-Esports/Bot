@@ -29,6 +29,8 @@ export class SaveCommand extends Command {
 
         const newNickname = await member.setNickname(player.name).catch((_) => { return null });
 
+        let rolesToSet = member.roles.cache.filter((role) => ![...Object.values(verification.roles)].includes(role.id)).map((role) => role.id);
+
         const successEmbed = new MessageEmbed()
             .setAuthor({ name: `${interaction.user.tag} | 🏆 ${player.trophies.toLocaleString()}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }), url: `https://brawlify.com/stats/profile/${player.tag.replace("#", "")}` })
             .setColor("GREEN")
@@ -50,14 +52,17 @@ export class SaveCommand extends Command {
                 verification.roles[clubMember?.role ?? "member"],
                 clubData.toJSON().roleId
             ];
-            await member.roles.set(roles);
+            rolesToSet.push(...roles);
+            rolesToSet = [...new Set(rolesToSet)];
+
+            await member.roles.set(rolesToSet);
 
             successEmbed.setDescription([
                 `Account linked: ${member.toString()} with **${player.name} | ${player.tag}**.`,
                 `${newNickname?.displayName ? "Unable to change **Nickname**." : `Nickname changed to **${player.name}**.`}`,
                 `Associated with club: **${player.club.name ?? "None"}**.`,
-                `Club tag: **${player.club.tag}**.`,
-                `Roles changed: ${roles.map((role) => `<@&${role}>`).join(", ")}.`,
+                `Club tag: **${player.club.tag ?? "None"}**.`,
+                `Roles changed: ${[...new Set(roles)].map((role) => `<@&${role}>`).join(", ")}.`,
             ].join("\n"))
 
             return interaction.editReply({ embeds: [successEmbed] });
@@ -66,14 +71,17 @@ export class SaveCommand extends Command {
             const roles = [
                 verification.roles.default
             ];
-            await member.roles.set(roles);
+            rolesToSet.push(...roles);
+            rolesToSet = [...new Set(rolesToSet)];
+
+            await member.roles.set(rolesToSet);
 
             successEmbed.setDescription([
                 `Account linked: ${member.toString()} with **${player.name} | ${player.tag}**.`,
                 `${newNickname?.displayName ? "Unable to change **Nickname**" : `Nickname changed to **${player.name}**`}.`,
                 `Associated with club: **${player.club.name ?? "None"}**.`,
-                `Club tag: **${player.club.tag}**.`,
-                `Roles changed: ${roles.map((role) => `<@&${role}>`).join(", ")}.`,
+                `Club tag: **${player.club.tag ?? "None"}**.`,
+                `Roles changed: ${[...new Set(roles)].map((role) => `<@&${role}>`).join(", ")}.`,
             ].join("\n"))
 
             return interaction.editReply({ embeds: [successEmbed] });

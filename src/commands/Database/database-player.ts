@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior } from '@sapphire/framework';
-import { CommandInteraction, MessageEmbed, User } from 'discord.js';
+import type { CommandInteraction, User } from 'discord.js';
 import { getPlayer } from '../../lib/api/brawlstars';
 import { failEmbed, loadingEmbed, successEmbed } from '../../lib/constants/embed';
 
@@ -62,14 +62,15 @@ export class DatabasePlayerCommand extends Command {
             const allPlayers = (await this.container.database.models.player.findAll()).map((player) => player.toJSON());
 
             const pagination = new PaginatedMessage();
-            const embedPages = this.splitChunk(allPlayers, 10).map((player) => {
-                return new MessageEmbed()
-                    .setDescription(player.map((p: any, i: number) => `❯ ${++i}: <@!${p.id}>\n　└─ (${p.tag}) ${p.name}`).join("\n"))
-                    .setColor("ORANGE");
+            this.splitChunk(allPlayers, 10).map((player) => {
+                pagination.addPageEmbed((embed) => {
+                    return embed
+                        .setDescription(player.map((p: any, i: number) => `❯ ${++i}: <@!${p.id}>\n　└─ (${p.tag}) ${p.name}`).join("\n"))
+                        .setColor("ORANGE");
+                });
             });
 
-            pagination.addPageEmbeds(embedPages);
-            await pagination.run(message);
+            await pagination.run(message, interaction.user);
         }
 
         return;
@@ -134,7 +135,7 @@ export class DatabasePlayerCommand extends Command {
 
             },
             {
-                guildIds: [this.container.config.bot.guilds.dev],
+                guildIds: [this.container.config.bot.guilds.dev, this.container.config.bot.guilds.main],
                 behaviorWhenNotIdentical: RegisterBehavior.Overwrite
             }
         );
