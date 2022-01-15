@@ -4,6 +4,7 @@ import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colore
 import type { Sequelize } from 'sequelize/dist';
 import { initializeDatabase } from '../lib/database/main';
 import { loadWorkers } from '../lib/workers/loadWorkers';
+import discordLogs from "discord-logs";
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -25,6 +26,7 @@ export class ReadyEvent extends Listener {
         //* Load modules
         await this.initializeDatabase();
         loadWorkers();
+        discordLogs(this.container.client);
 
         //* Unloads and loads the listeners again
         this.reloadListeners();

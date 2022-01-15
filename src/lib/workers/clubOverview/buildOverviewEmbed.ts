@@ -57,7 +57,7 @@ export const buildOverviewEmbed = async () => {
             }
         );
 
-    const clubListEmbeds: MessageEmbed[] = [];
+    const clubListPayload: MessageOptions[] = [];
 
     splitChunk(allClubs.sort((a, b) => b.trophies - a.trophies), 12).forEach((clubs: AClub[]) => {
         const embed = new MessageEmbed(clubOverview.embeds.clubList);
@@ -73,25 +73,23 @@ export const buildOverviewEmbed = async () => {
             ]
             embed.addField(club.name, field.join("\n"), true);
         });
-        clubListEmbeds.push(embed);
-    });
 
-    const selectClubMenu = new MessageSelectMenu()
+        const selectClubMenu = new MessageSelectMenu()
         .setCustomId(clubOverview.customId)
         .setPlaceholder("Select a club to view its stats!")
-        .addOptions(allClubs.sort((a, b) => b.trophies - a.trophies).map((club) => {
+        .addOptions(clubs.sort((a, b) => b.trophies - a.trophies).map((club) => {
             return {
                 label: club.name,
                 description: `${club.tag}`,
                 value: club.tag,
             }
         }));
+       
+        clubListPayload.push({embeds: [embed], components: [new MessageActionRow().setComponents(selectClubMenu)]});
+    });
 
     return [
         { embeds: [clubInfoEmbed], content: null },
-        ...clubListEmbeds.map((embed, index) => {
-            if (index === clubListEmbeds.length - 1) return { embeds: [embed], content: null, components: [new MessageActionRow().setComponents(selectClubMenu)] };
-            else return { embeds: [embed], content: null };
-        })
+        ...clubListPayload
     ] as MessageOptions[];
 }

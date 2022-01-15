@@ -56,6 +56,7 @@ export class clubCommand extends Command {
         const president = clubData.members.find(m => m.role === "president");
 
         const infoEmbed = new MessageEmbed()
+            .setColor("ORANGE")
             .setThumbnail(`https://cdn.brawlify.com/club/${clubData.badgeId}.png`)
             .setAuthor({ name: `${clubData.name} (${clubData.tag})`, iconURL: `https://cdn.brawlify.com/club/${clubData.badgeId}.png`, url: `https://brawlify.com/stats/club/${clubData.tag.replace("#", "")}` })
             .addField("Trophies", `${brawlstarsEmojis.icons.trophy_club} ${clubData.trophies.toLocaleString()}`, true)

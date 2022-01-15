@@ -51,7 +51,6 @@ export class UserCommand extends Command {
         const embed = new MessageEmbed()
             .setColor(`#${apiResponse.nameColor.replace('0xff', '')}`)
             .setAuthor({ name: `${apiResponse.name} (${apiResponse.tag})`, iconURL: `https://cdn.brawlify.com/profile/${apiResponse.icon.id}.png`, url: `https://brawlify.com/stats/profile/${apiResponse.tag.replace("#", "")}` })
-            .setThumbnail(`https://cdn.brawlify.com/profile/${apiResponse.icon.id}.png`)
             .setImage(`https://share.brawlify.com/player-graph/${apiResponse.tag.replace('#', '')}?${Date.now()}`)
             .addFields([
                 {
@@ -67,12 +66,6 @@ export class UserCommand extends Command {
                 {
                     name: 'Level',
                     value: `${brawlstarsEmojis.icons.exp} \`${apiResponse.expLevel}\``,
-                    inline: true
-                },
-                {
-                    name: 'Championship',
-                    value: `${brawlstarsEmojis.icons.champion_ship} \`${apiResponse.isQualifiedFromChampionshipChallenge ? 'Qualified' : 'Not Qualified'
-                        }\``,
                     inline: true
                 },
                 {

@@ -7,7 +7,7 @@ const client = new SapphireClient({
     defaultPrefix: config.bot.defaultPrefix,
     caseInsensitiveCommands: config.bot.caseInsensitiveCommands,
     logger: {
-        level: LogLevel.Info
+        level: LogLevel.Debug
     },
     shards: 'auto',
     intents: config.bot.intents as BitFieldResolvable<IntentsString, number>,
