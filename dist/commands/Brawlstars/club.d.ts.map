@@ -1,0 +1,1 @@
+{"version":3,"file":"club.d.ts","sourceRoot":"","sources":["../../../src/commands/Brawlstars/club.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,0BAA0B,EAAE,OAAO,EAAoC,MAAM,qBAAqB,CAAC;AAC5G,OAAO,EAAE,kBAAkB,EAAgB,MAAM,YAAY,CAAC;AAI9D,qBAIa,WAAY,SAAQ,OAAO;IAEd,YAAY,CAAC,WAAW,EAAE,kBAAkB;IAyClE,OAAO,CAAC,SAAS;IA2BjB,OAAO,CAAC,IAAI,CAKX;IAEe,2BAA2B,CAAC,QAAQ,EAAE,0BAA0B;CAiCnF"}

@@ -1,6 +1,5 @@
 src/config.ts
 .vscode
-dist
 
 # Logs
 logs

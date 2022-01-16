@@ -1,0 +1,1 @@
+{"version":3,"file":"SessionEnd.d.ts","sourceRoot":"","sources":["../../../../../src/listeners/features/modmail/events/SessionEnd.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,QAAQ,EAAmB,MAAM,qBAAqB,CAAC;AAEhE,OAAO,EAAE,iBAAiB,EAAgB,MAAM,YAAY,CAAC;AAQ7D,qBAGa,SAAU,SAAQ,QAAQ;IACtB,GAAG,CAAC,iBAAiB,EAAE,iBAAiB;CAiCxD"}

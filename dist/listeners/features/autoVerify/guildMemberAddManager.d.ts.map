@@ -1,0 +1,1 @@
+{"version":3,"file":"guildMemberAddManager.d.ts","sourceRoot":"","sources":["../../../../src/listeners/features/autoVerify/guildMemberAddManager.ts"],"names":[],"mappings":"AACA,OAAO,EAAU,QAAQ,EAAmB,MAAM,qBAAqB,CAAC;AACxE,OAAO,KAAK,EAAE,WAAW,EAAE,MAAM,YAAY,CAAC;AAI9C,qBAIa,SAAU,SAAQ,QAAQ;IACtB,GAAG,CAAC,MAAM,EAAE,WAAW;CAQvC"}
