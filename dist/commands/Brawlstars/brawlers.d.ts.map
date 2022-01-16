@@ -1,0 +1,1 @@
+{"version":3,"file":"brawlers.d.ts","sourceRoot":"","sources":["../../../src/commands/Brawlstars/brawlers.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,0BAA0B,EAAE,OAAO,EAAoC,MAAM,qBAAqB,CAAC;AAC5G,OAAO,KAAK,EAAE,kBAAkB,EAAkB,MAAM,YAAY,CAAC;AAIrE,qBAIa,WAAY,SAAQ,OAAO;IACd,YAAY,CAAC,WAAW,EAAE,kBAAkB;;;YAqCpD,YAAY;IAKV,2BAA2B,CAAC,QAAQ,EAAE,0BAA0B;CAiCnF"}

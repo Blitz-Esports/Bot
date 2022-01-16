@@ -1,0 +1,1 @@
+{"version":3,"file":"profile.d.ts","sourceRoot":"","sources":["../../../src/commands/Brawlstars/profile.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,0BAA0B,EAAE,OAAO,EAAoC,MAAM,qBAAqB,CAAC;AAC5G,OAAO,EAAE,kBAAkB,EAAE,YAAY,EAAE,MAAM,YAAY,CAAC;AAK9D,qBAIa,WAAY,SAAQ,OAAO;IACd,YAAY,CAAC,WAAW,EAAE,kBAAkB;;;YAoCpD,SAAS;IAsEP,2BAA2B,CAAC,QAAQ,EAAE,0BAA0B;CAiCnF"}

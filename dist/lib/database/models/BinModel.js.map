@@ -1,0 +1,1 @@
+{"version":3,"file":"BinModel.js","sourceRoot":"","sources":["../../../../src/lib/database/models/BinModel.ts"],"names":[],"mappings":";;;AAAA,yCAAuD;AAE1C,QAAA,QAAQ,GAAoB;IACrC,EAAE,EAAE;QACA,IAAI,EAAE,qBAAS,CAAC,IAAI;QACpB,UAAU,EAAE,IAAI;KACnB;IACD,IAAI,EAAE;QACF,IAAI,EAAE,qBAAS,CAAC,IAAI;QACpB,SAAS,EAAE,IAAI;KAClB;CACJ,CAAC"}
