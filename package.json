@@ -29,7 +29,7 @@
     "@sapphire/discord.js-utilities": "^4.1.0",
     "@sapphire/fetch": "^2.0.3",
     "@sapphire/framework": "^2.3.0-pr-293.69c030f.0",
-    "@sapphire/plugin-api": "^3.0.1",
+    "@sapphire/plugin-api": "^3.0.2",
     "@sapphire/plugin-editable-commands": "^1.0.1",
     "@sapphire/plugin-logger": "^2.0.1",
     "@sapphire/plugin-subcommands": "^2.0.1",
