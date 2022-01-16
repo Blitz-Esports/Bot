@@ -121,7 +121,8 @@ export const clubLogHandler = async (dbClub: IClub, apiClub: AClub) => {
     });
 
     const output = [...clubLogs, ...dbClub.clubLogs].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-    return output;
+    output; //TODO: Renable this with better code
+    return [];
 }
 
 interface IClub {

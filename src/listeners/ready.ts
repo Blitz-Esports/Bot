@@ -1,6 +1,9 @@
 import type { ListenerOptions, PieceContext } from '@sapphire/framework';
 import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
+import DisTube from "distube";
+import SpotifyPlugin from '@distube/spotify';
+import SoundCloudPlugin from '@distube/soundcloud';
 import type { Sequelize } from 'sequelize/dist';
 import { initializeDatabase } from '../lib/database/main';
 import { loadWorkers } from '../lib/workers/loadWorkers';
@@ -27,6 +30,7 @@ export class ReadyEvent extends Listener {
         await this.initializeDatabase();
         loadWorkers();
         discordLogs(this.container.client);
+        await this.loadMusicModule();
 
         //* Unloads and loads the listeners again
         this.reloadListeners();
@@ -65,6 +69,21 @@ export class ReadyEvent extends Listener {
         this.container.stores.get('listeners').loadAll();
     }
 
+    private async loadMusicModule() {
+
+        if (this.container.config.features.music.enabled) {
+            this.container.music = new DisTube(this.container.client, {
+                leaveOnEmpty: true,
+                leaveOnFinish: false,
+                leaveOnStop: false,
+                nsfw: false,
+                plugins: [new SpotifyPlugin({ emitEventsAfterFetching: true }), new SoundCloudPlugin()]
+            });
+            this.container.client.emit(this.container.config.features.music.events.ready);
+        } else this.container.logger.debug("Music module is disabled.");
+
+    }
+
     private async initializeDatabase() {
         const database = await initializeDatabase();
         this.container.database = database;
@@ -74,6 +93,7 @@ export class ReadyEvent extends Listener {
 
 declare module '@sapphire/pieces' {
     interface Container {
-        database: Sequelize
+        database: Sequelize;
+        music: DisTube;
     }
 }
