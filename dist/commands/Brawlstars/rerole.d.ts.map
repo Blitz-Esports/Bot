@@ -1,1 +1,0 @@
-{"version":3,"file":"rerole.d.ts","sourceRoot":"","sources":["../../../src/commands/Brawlstars/rerole.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,0BAA0B,EAAE,OAAO,EAAoC,MAAM,qBAAqB,CAAC;AAC5G,OAAO,EAAE,kBAAkB,EAAgB,MAAM,YAAY,CAAC;AAO9D,qBAIa,aAAc,SAAQ,OAAO;IAEhB,YAAY,CAAC,WAAW,EAAE,kBAAkB;IAoElD,2BAA2B,CAAC,QAAQ,EAAE,0BAA0B;YAqBlE,aAAa;CAK9B"}

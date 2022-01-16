@@ -1,1 +1,0 @@
-{"version":3,"file":"TranscriptModel.js","sourceRoot":"","sources":["../../../../src/lib/database/models/TranscriptModel.ts"],"names":[],"mappings":";;;AAAA,yCAAuD;AAE1C,QAAA,eAAe,GAAqB;IAC7C,EAAE,EAAE;QACA,IAAI,EAAE,qBAAS,CAAC,IAAI;QACpB,UAAU,EAAE,IAAI;KACnB;IACD,IAAI,EAAE;QACF,IAAI,EAAE,qBAAS,CAAC,IAAI;QACpB,SAAS,EAAE,KAAK;KACnB;CACJ,CAAC"}

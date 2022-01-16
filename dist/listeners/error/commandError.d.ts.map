@@ -1,1 +1,0 @@
-{"version":3,"file":"commandError.d.ts","sourceRoot":"","sources":["../../../src/listeners/error/commandError.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,4BAA4B,EAAU,QAAQ,EAAmB,MAAM,qBAAqB,CAAC;AAItG,qBAIa,UAAW,SAAQ,QAAQ;IAEvB,GAAG,CAAC,KAAK,EAAE,GAAG,EAAE,OAAO,EAAE,4BAA4B;CAgBrE"}

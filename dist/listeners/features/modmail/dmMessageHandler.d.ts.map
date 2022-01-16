@@ -1,1 +1,0 @@
-{"version":3,"file":"dmMessageHandler.d.ts","sourceRoot":"","sources":["../../../../src/listeners/features/modmail/dmMessageHandler.ts"],"names":[],"mappings":"AACA,OAAO,EAAU,QAAQ,EAAmB,MAAM,qBAAqB,CAAC;AACxE,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,YAAY,CAAC;AAI1C,qBAIa,SAAU,SAAQ,QAAQ;IACtB,GAAG,CAAC,OAAO,EAAE,OAAO;CAmBpC"}
