@@ -1,2 +1,0 @@
-export declare const css = "\n.d-emoji {\n    width: 1.25em;\n    height: 1.25em;\n    vertical-align: -0.2em;\n}\n\nbody {\n    color: #eee;\n    background-color: #2a2a2a;\n    font-family: Arial, Helvetica, sans-serif;\n}\n\n";
-//# sourceMappingURL=css.d.ts.map

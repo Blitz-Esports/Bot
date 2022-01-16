@@ -1,1 +1,0 @@
-{"version":3,"file":"interactionHandler.d.ts","sourceRoot":"","sources":["../../../../src/listeners/features/modmail/interactionHandler.ts"],"names":[],"mappings":"AACA,OAAO,EAAU,QAAQ,EAAmB,MAAM,qBAAqB,CAAC;AACxE,OAAO,KAAK,EAAE,WAAW,EAAE,MAAM,YAAY,CAAC;AAK9C,qBAIa,SAAU,SAAQ,QAAQ;IACtB,GAAG,CAAC,WAAW,EAAE,WAAW;CAO5C"}
