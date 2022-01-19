@@ -1,7 +1,7 @@
 import { fetch, FetchResultTypes } from "@sapphire/fetch";
 import { loadImage, createCanvas, registerFont, Canvas } from "canvas";
 import createCollage from "@settlin/collage";
-registerFont("./assets/fonts/Lilita-One.ttf", { family: "Liliita" });
+registerFont("./Assets/fonts/Lilita-One.ttf", { family: "Liliita" });
 import config from "../../config";
 const { brawlstars } = config.api;
 
