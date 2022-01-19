@@ -50,6 +50,7 @@
     "distube": "^3.1.1",
     "dotenv-cra": "^3.0.2",
     "ffmpeg-static": "^4.4.1",
+    "form-data": "^4.0.0",
     "googleapis": "^89.0.0",
     "libsodium-wrappers": "^0.7.9",
     "moment": "^2.29.1",
