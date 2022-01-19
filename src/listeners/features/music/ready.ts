@@ -10,7 +10,7 @@ const { music: musicConfig } = config.features;
 
 @ApplyOptions<ListenerOptions>({
     name: "music:ready",
-    event: "music:ready"
+    event: musicConfig.events.Ready
 })
 export class UserEvent extends Listener {
     public async run() {

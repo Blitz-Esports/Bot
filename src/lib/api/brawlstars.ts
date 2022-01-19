@@ -46,7 +46,7 @@ export const brawlstarsEmojis = {
 }
 
 export const encodeTag = (tag: string) => {
-    return encodeURIComponent(`#${tag.toUpperCase().replace("#", "")}`);
+    return encodeURIComponent(`#${tag.toUpperCase().replace("#", "").replaceAll("0", "O")}`);
 }
 
 export const getClub = async (tag: string) => {

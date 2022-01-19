@@ -6,8 +6,8 @@ import { getPlayer, AClub } from '../../../../lib/api/brawlstars';
 const { verification } = config.features;
 
 @ApplyOptions<ListenerOptions>({
-    name: "autoVerify:memberJoin",
-    event: verification.events.memberJoin
+    name: "autoVerify:giveRoles",
+    event: verification.events.GiveRoles
 })
 export class UserEvent extends Listener {
     public async run(member: GuildMember, user: { id: string, tag: string, name: string }) {

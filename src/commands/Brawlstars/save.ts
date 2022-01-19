@@ -59,7 +59,7 @@ export class SaveCommand extends Command {
 
             successEmbed.setDescription([
                 `Account linked: ${member.toString()} with **${player.name} | ${player.tag}**.`,
-                `${newNickname?.displayName ? "Unable to change **Nickname**." : `Nickname changed to **${player.name}**.`}`,
+                `${newNickname ? `Nickname changed to **${player.name}**.` : "Unable to change **Nickname**."}`,
                 `Associated with club: **${player.club.name ?? "None"}**.`,
                 `Club tag: **${player.club.tag ?? "None"}**.`,
                 `Roles changed: ${[...new Set(roles)].map((role) => `<@&${role}>`).join(", ")}.`,
@@ -78,7 +78,7 @@ export class SaveCommand extends Command {
 
             successEmbed.setDescription([
                 `Account linked: ${member.toString()} with **${player.name} | ${player.tag}**.`,
-                `${newNickname?.displayName ? "Unable to change **Nickname**" : `Nickname changed to **${player.name}**`}.`,
+                `${newNickname ? `Nickname changed to **${player.name}**.` : "Unable to change **Nickname**."}`,
                 `Associated with club: **${player.club.name ?? "None"}**.`,
                 `Club tag: **${player.club.tag ?? "None"}**.`,
                 `Roles changed: ${[...new Set(roles)].map((role) => `<@&${role}>`).join(", ")}.`,

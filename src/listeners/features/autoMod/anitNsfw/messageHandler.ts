@@ -20,7 +20,7 @@ export class UserEvent extends Listener {
             const resolvedResponse = await Promise.all(nsfwDetectedInImages);
             const nsfwResponse = resolvedResponse.filter((response) => response !== null);
             if (nsfwResponse.length > 0 && nsfwResponse.some((res) => res?.isHentai || res?.isPorn === true)) {
-                this.container.client.emit(antiNsfw.events.nsfwDetect, message, nsfwResponse);
+                this.container.client.emit(antiNsfw.events.NsfwDetect, message, nsfwResponse);
             }
         }
 

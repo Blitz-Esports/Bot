@@ -14,7 +14,7 @@ export class UserEvent extends Listener {
         const user = await this.container.database.models.player.findOne({ where: { id: member.id } });
         if (!user) return;
         else {
-            this.container.client.emit(verification.events.memberJoin, member, user);
+            this.container.client.emit(verification.events.GiveRoles, member, user);
         }
     }
 }

@@ -6,7 +6,7 @@ import config from '../../../config';
 const { boostTracker } = config.features.logging;
 
 @ApplyOptions<ListenerOptions>({
-    name: boostTracker.events.guildMemberBoost,
+    name: boostTracker.events.GuildMemberBoost,
     event: "guildMemberBoost"
 })
 export class UserEvent extends Listener {

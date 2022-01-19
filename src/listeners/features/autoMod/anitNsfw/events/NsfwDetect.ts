@@ -10,7 +10,7 @@ const { antiNsfw } = config.features.automod;
 
 @ApplyOptions<ListenerOptions>({
     name: "antiNsfw:nsfwDetect",
-    event: antiNsfw.events.nsfwDetect
+    event: antiNsfw.events.NsfwDetect
 })
 export class UserEvent extends Listener {
     public async run(message: Message, response: AntiNsfw[]) {

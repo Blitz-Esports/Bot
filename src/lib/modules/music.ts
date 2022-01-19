@@ -5,6 +5,8 @@ import config from "../../config";
 
 const { music } = config.features;
 
+const ImageServer = "https://cdn-server.screeneros.repl.co";
+
 export const queueEmbed = (queue: Queue) => {
     if (queue.songs.length === 0) return null;
     const formatQueue = queue?.songs.map((song, i) => {
@@ -27,8 +29,8 @@ export const playerEmbed = (queue: Queue, song: Song) => {
     if (queue.paused) playerStatus = '⏸ - Paused';
     const embed = new MessageEmbed()
         .setColor('#DE3047')
-        .setThumbnail(`https://cdn.airshift.ml/image/author/${song.id}.png`)
-        .setImage(`https://cdn.airshift.ml/image/thumbnail/${song.id}.png`)
+        .setThumbnail(`${ImageServer}/image/author/${song.id}.png`)
+        .setImage(`${ImageServer}/image/thumbnail/${song.id}.png`)
         .setTitle(song.name ?? 'Unknown Title')
         .setURL(song.url)
         .addField('Status', playerStatus ?? 'Unknown', true)
