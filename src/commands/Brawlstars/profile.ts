@@ -39,7 +39,7 @@ export class UserCommand extends Command {
         const apiResponse = await getPlayer(tag);
         if (!apiResponse)
             return {
-                embeds: [failEmbed("Unable to find the stats of the player. The user's tag is invalid or the game is under maintainance.")]
+                embeds: [failEmbed("Unable to find the stats of the player. The user's tag is invalid or the game is under maintenance.")]
             };
 
         const payload = await this.makeEmbed(apiResponse);
@@ -102,7 +102,7 @@ export class UserCommand extends Command {
                 },
                 {
                     name: 'Club Information',
-                    value: `${brawlstarsEmojis.icons.club} [${apiResponse.club.tag ? `${apiResponse.club.name}\n(${apiResponse.club.tag})` : 'No Club'
+                    value: `${brawlstarsEmojis.icons.club} [${apiResponse.club.tag ? `${apiResponse.club.name} (${apiResponse.club.tag})` : 'No Club'
                         }](https://brawlify.com/stats/club/${apiResponse.club.tag ? apiResponse.club.tag.replace('#', '') : 'No-Club'})`,
                     inline: true
                 }
@@ -110,7 +110,7 @@ export class UserCommand extends Command {
 
         const discordAccounts = (await this.container.database.models.player.findAll({ where: { tag: apiResponse.tag } })).map((player) => player.toJSON());
         if (discordAccounts.length > 0) {
-            embed.addField('Discord Account(s)', `${config.default.emojis.discord} ${discordAccounts.map((account) => `<@!${account.id}>`).join(', ')}`, false);
+            embed.addField('Discord Account(s)', `${config.default.emojis.discord} ${discordAccounts.map((account) => `<@!${account.id}>`).join(', ')}`, true);
         }
 
         return { embeds: [embed] };

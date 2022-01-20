@@ -23,7 +23,7 @@ export class clubCommand extends Command {
         else if (interaction.options.get("tag", false)) {
 
             const club = await getClub(interaction.options.getString("tag") as string);
-            if (!club) return interaction.editReply({ embeds: [failEmbed("Unable to find the stats of the club. The club's tag is invalid or the game is under maintainance.")] });
+            if (!club) return interaction.editReply({ embeds: [failEmbed("Unable to find the stats of the club. The club's tag is invalid or the game is under maintenance.")] });
             console.log(club)
             return interaction.editReply({ embeds: this.makeEmbed(club) });
         }
@@ -42,11 +42,11 @@ export class clubCommand extends Command {
         if (!tag) return interaction.editReply({ embeds: [failEmbed("Unable to resolve tag.")] });
 
         const player = await getPlayer(tag);
-        if (!player) return interaction.editReply({ embeds: [failEmbed("Unable to fetch the club of the player. The player's tag is invalid or the game is under maintainance.")] });
+        if (!player) return interaction.editReply({ embeds: [failEmbed("Unable to fetch the club of the player. The player's tag is invalid or the game is under maintenance.")] });
         if (!player.club.tag) return interaction.editReply({ embeds: [failEmbed("The player is not in any club.")] });
 
         const club = await getClub(player.club.tag);
-        if (!club) return interaction.editReply({ embeds: [failEmbed("Unable to fetch the club stats. The club's tag is invalid or the game is under maintainance.")] });
+        if (!club) return interaction.editReply({ embeds: [failEmbed("Unable to fetch the club stats. The club's tag is invalid or the game is under maintenance.")] });
 
         return interaction.editReply({ embeds: this.makeEmbed(club) });
     }

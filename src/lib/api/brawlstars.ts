@@ -1,7 +1,12 @@
 import { fetch, FetchResultTypes } from "@sapphire/fetch";
 import { loadImage, createCanvas, registerFont, Canvas } from "canvas";
 import createCollage from "@settlin/collage";
-registerFont("./Assets/fonts/Lilita-One.ttf", { family: "Liliita" });
+registerFont("./assets/fonts/Lilita-One.ttf", { family: "Liliita" });
+registerFont("./assets/fonts/Arial-Unicode-Ms.ttf", { family: "Arial-Unicode-Ms" });
+registerFont("./assets/fonts/Nougat-ExtraBlack.ttf", { family: "Nougat-ExtraBlack" });
+registerFont("./assets/fonts/NotoColorEmoji.ttf", { family: "NotoColorEmoji" });
+registerFont("./assets/fonts/Segoe-UI-Symbol.ttf", { family: "Segoe-UI-Symbol" });
+
 import config from "../../config";
 const { brawlstars } = config.api;
 
@@ -316,6 +321,118 @@ export const generateBrawlerListCard = async function (player: APlayer) {
     return imageCards;
 }
 
+export const generateClubMemberListCard = async function (club: AClub) {
+    const { members } = club;
+    let cards: Buffer[] = [];
+    let rank = 0;
+    const icons = await Promise.all(club.members.map((member) => loadImage(`https://cdn.brawlify.com/profile-low/${member.icon.id}.png`).catch(() => null)));
+
+    splitChunk(members, 10).forEach(async (memberChunk: AClubMember[]) => {
+        const canvas = createCanvas(1440, 800);
+        const ctx = canvas.getContext("2d");
+
+        //* Background Color
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        memberChunk.forEach((mem, indx) => {
+            rank++;
+            const i = ++indx;
+
+            //* Draw Lines
+            ctx.beginPath();
+            ctx.moveTo(0, 20 + i * 78);
+            ctx.lineTo(canvas.width, 20 + i * 78);
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+
+            //* Write Rank
+            ctx.fillStyle = "grey";
+            ctx.font = "40px Liliita";
+            let textPos = (i < 10) ? 80 : 70;
+            if (rank.toString().endsWith("0")) textPos = 78;
+            ctx.fillText(rank.toString(), textPos, i * 78);
+
+            //* Draw Icon Image
+            ctx.drawImage(icons[rank - 1], 180, (i * 78) - 45, 55, 55);
+
+            //* Write name
+            ctx.fillStyle = mem.nameColor.replace("0xff", "#");
+            ctx.font = `40px Liliita,Arial-Unicode-Ms,NotoColorEmoji,Nougat-ExtraBlack,Segoe-UI-Symbol`;
+            ctx.fillText(mem.name, 300, i * 78);
+
+            //* Write role
+            ctx.fillStyle = "grey";
+            ctx.font = "40px Liliita";
+            ctx.fillText(capitlizeString(mem.role.replace(/([A-Z])/g, " $1")), 850, i * 78);
+
+            //* Write trophies
+            ctx.fillStyle = "grey";
+            ctx.font = "40px Liliita,Arial-Unicode-Ms";
+            ctx.fillText(mem.trophies.toLocaleString(), canvas.width - 200, i * 78);
+
+        });
+
+        cards.push(canvas.toBuffer());
+
+    });
+
+    generateClubMemberCard;
+    return cards;
+}
+
+
+const generateClubMemberCard = async function (members: AClubMember[], rank: number = 0) {
+
+    const icons = await Promise.all(members.map((member) => loadImage(`https://cdn.brawlify.com/profile-low/${member.icon.id}.png`)));
+
+    const canvas = createCanvas(1440, 800);
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    members.forEach((member, indx) => {
+        const i = ++indx;
+        rank++;
+
+        //* Draw Lines
+        ctx.beginPath();
+        ctx.moveTo(0, 20 + i * 78);
+        ctx.lineTo(canvas.width, 20 + i * 78);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+
+        //* Write Rank
+        ctx.fillStyle = "grey";
+        ctx.font = "40px Liliita";
+        ctx.fillText(rank.toString(), (i < 10) ? 80 : 70, i * 78);
+
+        //* Draw Icon Image
+        ctx.drawImage(icons[rank], 180, (i * 78) - 45, 55, 55);
+
+        //* Write name
+        ctx.fillStyle = member.nameColor.replace("0xff", "#");
+        ctx.font = `40px Liliita,Arial-Unicode-Ms,Nougat-ExtraBlack`;
+        ctx.fillText(member.name, 300, i * 78);
+
+        //* Write role
+        ctx.fillStyle = "grey";
+        ctx.font = "40px Liliita";
+        ctx.fillText(capitlizeString(member.role.replace(/([A-Z])/g, " $1")), 850, i * 78);
+
+        //* Write trophies
+        ctx.fillStyle = "grey";
+        ctx.font = "40px Liliita,Arial-Unicode-Ms";
+        ctx.fillText(member.trophies.toLocaleString(), canvas.width - 200, i * 78);
+
+    });
+
+    return canvas.toBuffer();
+}
+
 const splitChunk = (array: any[], chunk?: number) => {
     const inputArray = array;
     var perChunk = chunk || 15;
@@ -328,4 +445,8 @@ const splitChunk = (array: any[], chunk?: number) => {
         return resultArray
     }, [])
     return result;
+}
+
+function capitlizeString(word: string) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
 }
