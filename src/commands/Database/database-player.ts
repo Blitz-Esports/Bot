@@ -59,13 +59,13 @@ export class DatabasePlayerCommand extends Command {
             const message = await interaction.channel?.messages.fetch(apiMessage.id);
             if (!message) return interaction.editReply({ embeds: [failEmbed("Unable to resolve the message.")] });
 
-            const allPlayers = (await this.container.database.models.player.findAll()).map((player) => player.toJSON());
+            const allPlayers = (await this.container.database.models.player.findAll()).map((player, i) => { return { index: ++i, ...player.toJSON() } });
 
             const pagination = new PaginatedMessage();
             this.splitChunk(allPlayers, 10).map((player) => {
                 pagination.addPageEmbed((embed) => {
                     return embed
-                        .setDescription(player.map((p: any, i: number) => `❯ ${++i}: <@!${p.id}>\n　└─ (${p.tag}) ${p.name}`).join("\n"))
+                        .setDescription(player.map((p: any) => `❯ ${p.index}: <@${p.id}>\n　└─ (${p.tag}) ${p.name}`).join("\n"))
                         .setColor("ORANGE");
                 });
             });

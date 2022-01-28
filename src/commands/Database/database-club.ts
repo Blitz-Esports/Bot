@@ -55,14 +55,13 @@ export class DatabasePlayerCommand extends Command {
             const message = await interaction.channel?.messages.fetch(apiMessage.id);
             if (!message) return interaction.editReply({ embeds: [failEmbed("Unable to resolve the message.")] });
 
-            const allClubs = (await this.container.database.models.club.findAll()).map((club) => club.toJSON());
+            const allClubs = (await this.container.database.models.club.findAll()).map((club, i) => { return { index: ++i, ...club.toJSON() } });
 
             const pagination = new PaginatedMessage();
-            let i = 0;
             this.splitChunk(allClubs, 10).map((clubs) => {
                 pagination.addPageEmbed((embed) => {
                     return embed
-                        .setDescription(clubs.map((club: any) => `❯ ${++i}: ${club.roleId ? `<@&${club.roleId}>` : "No Role"}\n　└─ (${club.id}) ${club.name}`).join("\n"))
+                        .setDescription(clubs.map((club: any) => `❯ ${club.index}: ${club.roleId ? `<@&${club.roleId}>` : "No Role"}\n　└─ (${club.id}) ${club.name}`).join("\n"))
                         .setColor("ORANGE");
                 });
             });

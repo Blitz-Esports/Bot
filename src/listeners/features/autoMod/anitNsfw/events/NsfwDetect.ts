@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid';
 import config from '../../../../../config';
 import type { AntiNsfw } from '../../../../../lib/api/antiNsfw';
 import { warnEmbed } from '../../../../../lib/constants/embed';
+import { createWarn } from '../../../../../lib/modules/warn';
 
 const { antiNsfw } = config.features.automod;
 
@@ -20,8 +21,10 @@ export class UserEvent extends Listener {
             data: JSON.stringify(response)
         });
 
+        await createWarn(message.author.id, message.guild?.me?.id || "unknown", `[AutoMod] NSFW detected`);
+
         await message.reply({
-            embeds: [warnEmbed(`${message.author.toString()} has been warned. **Reason**: Posting NSFW content.`)],
+            embeds: [warnEmbed(`${message.author.toString()} has been warned. **Reason**: [AutoMod] Posting NSFW content.`)],
             components: [
                 new MessageActionRow().setComponents(new MessageButton()
                     .setStyle("LINK")

@@ -17,7 +17,6 @@ export class UserEvent extends Listener {
         const clubData = await this.container.database.models.club.findOne({ where: { id: player.club.tag } });
         const allClubRoles = (await this.container.database.models.club.findAll({})).map((club) => club.toJSON().roleId).filter((roleId) => roleId !== null);
 
-        await member.setNickname(player.name).catch(() => null);
         const rolesToSet = member.roles.cache.filter((role) => ![...Object.values(verification.roles), ...allClubRoles].includes(role.id)).map((role) => role.id);
 
         if (clubData) {

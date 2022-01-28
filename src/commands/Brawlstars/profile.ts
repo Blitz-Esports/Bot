@@ -110,7 +110,7 @@ export class UserCommand extends Command {
 
         const discordAccounts = (await this.container.database.models.player.findAll({ where: { tag: apiResponse.tag } })).map((player) => player.toJSON());
         if (discordAccounts.length > 0) {
-            embed.addField('Discord Account(s)', `${config.default.emojis.discord} ${discordAccounts.map((account) => `<@!${account.id}>`).join(', ')}`, true);
+            embed.addField('Discord Account(s)', `${config.default.emojis.discord} ${discordAccounts.map((account) => `<@${account.id}>`).join(', ')}`, true);
         }
 
         return { embeds: [embed] };

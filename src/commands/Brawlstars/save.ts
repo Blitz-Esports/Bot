@@ -27,8 +27,6 @@ export class SaveCommand extends Command {
 
         const clubData = await this.container.database.models.club.findOne({ where: { id: player.club.tag ?? "unknown" } });
 
-        const newNickname = await member.setNickname(player.name).catch((_) => { return null });
-
         let rolesToSet = member.roles.cache.filter((role) => ![...Object.values(verification.roles)].includes(role.id)).map((role) => role.id);
 
         const successEmbed = new MessageEmbed()
@@ -59,7 +57,6 @@ export class SaveCommand extends Command {
 
             successEmbed.setDescription([
                 `Account linked: ${member.toString()} with **${player.name} | ${player.tag}**.`,
-                `${newNickname ? `Nickname changed to **${player.name}**.` : "Unable to change **Nickname**."}`,
                 `Associated with club: **${player.club.name ?? "None"}**.`,
                 `Club tag: **${player.club.tag ?? "None"}**.`,
                 `Roles changed: ${[...new Set(roles)].map((role) => `<@&${role}>`).join(", ")}.`,
@@ -78,7 +75,6 @@ export class SaveCommand extends Command {
 
             successEmbed.setDescription([
                 `Account linked: ${member.toString()} with **${player.name} | ${player.tag}**.`,
-                `${newNickname ? `Nickname changed to **${player.name}**.` : "Unable to change **Nickname**."}`,
                 `Associated with club: **${player.club.name ?? "None"}**.`,
                 `Club tag: **${player.club.tag ?? "None"}**.`,
                 `Roles changed: ${[...new Set(roles)].map((role) => `<@&${role}>`).join(", ")}.`,

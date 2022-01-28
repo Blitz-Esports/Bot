@@ -77,7 +77,10 @@ export class ReadyEvent extends Listener {
                 leaveOnFinish: false,
                 leaveOnStop: false,
                 nsfw: false,
-                plugins: [new SpotifyPlugin({ emitEventsAfterFetching: true }), new SoundCloudPlugin()]
+                plugins: [new SpotifyPlugin({ emitEventsAfterFetching: true }), new SoundCloudPlugin()],
+                ytdlOptions: {
+                    highWaterMark: 1e+8
+                }
             });
             this.container.client.emit(this.container.config.features.music.events.Ready);
         } else this.container.logger.debug("Music module is disabled.");

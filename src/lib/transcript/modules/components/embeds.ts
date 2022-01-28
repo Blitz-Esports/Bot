@@ -66,10 +66,11 @@ export const embedComponent = (message: Message) => {
 		} ${discordEmbedInfo['color'] ? `color="${discordEmbedInfo['color']}"` : ''} ${
 			discordEmbedInfo['image'] ? `image="${discordEmbedInfo['image']}"` : ''
 		}  ${discordEmbedInfo['thumbnail'] ? `thumbnail="${discordEmbedInfo['thumbnail']}"` : ''}>`;
-		const MIDDLE = embed.description ? toHTML(embed.description, options) : '';
+		const description = embed.description ? toHTML(embed.description, options) : '';
+		const DESCRIPTION = `<discord-embed-description slot="description">${description}</discord-embed-description>`;
 		const FIELDS = discordEmbedFieldsArray.join('\n');
 
-		const output = `${START}${MIDDLE}<discord-embed-fields slot="fields"> ${FIELDS} </discord-embed-fields>${FOOTER}</discord-embed>`;
+		const output = `${START}${DESCRIPTION}<discord-embed-fields slot="fields"> ${FIELDS} </discord-embed-fields>${FOOTER}</discord-embed>`;
 		embedsArray.push(output);
 	});
 

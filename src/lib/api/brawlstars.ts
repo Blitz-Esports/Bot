@@ -1,6 +1,9 @@
 import { fetch, FetchResultTypes } from "@sapphire/fetch";
+import { filter } from "smart-array-filter";
 import { loadImage, createCanvas, registerFont, Canvas } from "canvas";
 import createCollage from "@settlin/collage";
+
+// Load fonts
 registerFont("./assets/fonts/Lilita-One.ttf", { family: "Liliita" });
 registerFont("./assets/fonts/Arial-Unicode-Ms.ttf", { family: "Arial-Unicode-Ms" });
 registerFont("./assets/fonts/Nougat-ExtraBlack.ttf", { family: "Nougat-ExtraBlack" });
@@ -90,6 +93,44 @@ export const getBrawlerInfo = async () => {
     } catch (e) {
         return null;
     }
+}
+
+let mapsCache: null | AMap[] = null;
+export const searchMap = async (query: string) => {
+    try {
+        if (!mapsCache) {
+            const res = await fetch<{ list: AMap[] }>("https://api.brawlapi.com/v1/maps", FetchResultTypes.JSON);
+            mapsCache = res.list;
+        }
+
+        const searchedMaps = filter(mapsCache, {
+            caseSensitive: false,
+            keywords: `name:${query}`
+        });
+
+        return searchedMaps;
+    } catch (e) {
+        return null;
+    }
+}
+
+export const getMap = async (mapId: string) => {
+
+    try {
+        const res = await fetch<AMapInfo>(`https://api.brawlapi.com/v1/maps/${mapId}`, FetchResultTypes.JSON);
+        return res;
+    } catch (e) {
+        return null;
+    }
+
+}
+
+export const getBrawlerIcon = async (id: number) => {
+    const allBrawlers = await getBrawlerInfo();
+    if (!allBrawlers) {
+        return await loadImage("https://iili.io/l3RnVI.png");
+    }
+    return await loadImage(allBrawlers.find(b => b.id === id)?.imageUrl ?? "https://iili.io/l3RnVI.png");
 }
 
 export interface APlayer {
@@ -197,13 +238,62 @@ export interface ABrawlerInfo {
     }[];
 }
 
+export interface AMap {
+    id: number;
+    name: string;
+    hash: string;
+    imageUrl: string;
+}
+
+export interface AMapInfo {
+    id: number;
+    new: boolean;
+    disabled: boolean;
+    name: string;
+    hash: string;
+    link: string;
+    imageUrl: string;
+    credit: string;
+    gameMode: {
+        id: number;
+        name: string;
+        hash: string;
+        version: number;
+        color: string;
+        link: string;
+        imageUrl: string;
+    };
+    lastActive: number;
+    stats: {
+        brawler: number;
+        winRate: number;
+        useRate: number;
+        starRate: number;
+    }[];
+    teamStats: {
+        name: string;
+        hash: string;
+        brawler1: number;
+        brawler2: number;
+        brawler3: number;
+        data: {
+            winRate: number;
+            useRate: number;
+            wins: number;
+            losses: number;
+            draws: number;
+            total: number;
+        }
+    }[];
+}
+
 export const generateBrawlerCard = async (brawlerId: number, powerLevel: number, rank: number, trophies: number, brawlerStarPowers: BrawlerCardStarPowers[], brawlerGadgets: BrawlerCardGadgets[]) => {
     const allBrawlerInfo = await getBrawlerInfo();
     if (!allBrawlerInfo) return null;
     const brawlerInfo = allBrawlerInfo.find(b => b.id === brawlerId);
     if (!brawlerInfo) return null;
 
-    const brawlerIconImage = await loadImage(brawlerInfo.imageUrl);
+    const brawlerIconImage = await loadImage(brawlerInfo.imageUrl).catch(() => { return loadImage("https://iili.io/l3RnVI.png") });
     const canvas = createCanvas(brawlerIconImage.width, brawlerIconImage.height);
     const ctx = canvas.getContext("2d");
     ctx.drawImage(brawlerIconImage, 0, 0);
@@ -225,14 +315,14 @@ export const generateBrawlerCard = async (brawlerId: number, powerLevel: number,
     });
 
     if (gadgets[0]) {
-        const gadgetIconImageSrc = await loadImage(gadgets[0].imageUrl);
+        const gadgetIconImageSrc = await loadImage(gadgets[0].imageUrl).catch(() => { return loadImage("https://iili.io/l3RnVI.png") });
         ctx.fillStyle = "black";
         ctx.fillRect(canvas.width - 50, 0, 50, 50);
         ctx.drawImage(gadgetIconImageSrc, (canvas.width - 40), 15, 30, 30);
         ctx.save();
     }
     if (gadgets[1]) {
-        const gadgetIconImageSrc = await loadImage(gadgets[1].imageUrl);
+        const gadgetIconImageSrc = await loadImage(gadgets[1].imageUrl).catch(() => { return loadImage("https://iili.io/l3RnVI.png") });
         ctx.fillStyle = "black";
         ctx.fillRect(canvas.width - 90, 0, 40, 50);
         ctx.drawImage(gadgetIconImageSrc, (canvas.width - 80), 15, 30, 30);
@@ -246,14 +336,14 @@ export const generateBrawlerCard = async (brawlerId: number, powerLevel: number,
     });
 
     if (starPowers[0]) {
-        const starPowerIconImageSrc = await loadImage(starPowers[0].imageUrl);
+        const starPowerIconImageSrc = await loadImage(starPowers[0].imageUrl).catch(() => { return loadImage("https://iili.io/l3RnVI.png") });
         ctx.fillStyle = "black";
         ctx.fillRect(canvas.width - 50, canvas.height - 50, 50, 50);
         ctx.drawImage(starPowerIconImageSrc, (canvas.width - 40), canvas.height - 40, 30, 30);
         ctx.save();
     }
     if (starPowers[1]) {
-        const starPowerIconImageSrc = await loadImage(iStarPowers[1].imageUrl);
+        const starPowerIconImageSrc = await loadImage(iStarPowers[1].imageUrl).catch(() => { return loadImage("https://iili.io/l3RnVI.png") });
         ctx.fillStyle = "black";
         ctx.fillRect(canvas.width - 90, canvas.height - 50, 40, 50);
         ctx.drawImage(starPowerIconImageSrc, (canvas.width - 80), canvas.height - 40, 30, 30);
@@ -261,7 +351,7 @@ export const generateBrawlerCard = async (brawlerId: number, powerLevel: number,
     }
 
 
-    const rankImageSrc = await loadImage(`https://cdn.brawlify.com/rank/${rank}.png`);
+    const rankImageSrc = await loadImage(`https://cdn.brawlify.com/rank/${rank}.png`).catch(() => { return loadImage("https://iili.io/l3RnVI.png") });
     ctx.fillStyle = "black";
     ctx.fillRect(0, canvas.height - 50, 50, 50);
     ctx.drawImage(rankImageSrc, 10, canvas.height - 40, 30, 30);
@@ -325,7 +415,7 @@ export const generateClubMemberListCard = async function (club: AClub) {
     const { members } = club;
     let cards: Buffer[] = [];
     let rank = 0;
-    const icons = await Promise.all(club.members.map((member) => loadImage(`https://cdn.brawlify.com/profile-low/${member.icon.id}.png`).catch(() => null)));
+    const icons = await Promise.all(club.members.map((member) => loadImage(`https://cdn.brawlify.com/profile-low/${member.icon.id}.png`).catch(() => { return loadImage("https://iili.io/l3RnVI.png") })));
 
     splitChunk(members, 10).forEach(async (memberChunk: AClubMember[]) => {
         const canvas = createCanvas(1440, 800);
@@ -378,57 +468,146 @@ export const generateClubMemberListCard = async function (club: AClub) {
 
     });
 
-    generateClubMemberCard;
     return cards;
 }
 
-
-const generateClubMemberCard = async function (members: AClubMember[], rank: number = 0) {
-
-    const icons = await Promise.all(members.map((member) => loadImage(`https://cdn.brawlify.com/profile-low/${member.icon.id}.png`)));
+export const generateMapCard = async function (map: AMapInfo) {
+    const brawlerInfo = await getBrawlerInfo();
+    if (!brawlerInfo) return null;
 
     const canvas = createCanvas(1440, 800);
     const ctx = canvas.getContext("2d");
 
+    //* Background Color
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    members.forEach((member, indx) => {
-        const i = ++indx;
-        rank++;
+    //* Draw Map Image
+    const mapImage = await loadImage(map.imageUrl);
+    let imageDimensions = [40, 15, 505, 770];
+    if (map.gameMode.hash === "Showdown" || map.gameMode.hash === "Duo-Showdown") imageDimensions = [30, 92, 617, 617];
+    ctx.drawImage(mapImage, ...imageDimensions);
 
-        //* Draw Lines
-        ctx.beginPath();
-        ctx.moveTo(0, 20 + i * 78);
-        ctx.lineTo(canvas.width, 20 + i * 78);
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
+    //* Write Map Name
+    ctx.fillStyle = map.gameMode.color;
+    ctx.font = "100px Liliita";
+    ctx.textAlign = "center";
+    ctx.fillText(map.name, 985, 120);
 
-        //* Write Rank
+    //* Draw most wins
+    ctx.fillStyle = "white";
+    ctx.font = "40px Liliita";
+    ctx.textAlign = "center";
+    ctx.fillText("Most Wins", 985, 200);
+    if (map.stats.length > 0) {
+        const mostWins = await Promise.all(map.stats.sort((a, b) => b.winRate - a.starRate).slice(0, 10).map(async (stat) => {
+            return {
+                ...stat,
+                icon: (await getBrawlerIcon(stat.brawler))
+            }
+        }));
+        mostWins.forEach((data, indx) => {
+            ctx.drawImage(data.icon, 700 + (indx * 60), 220, 50, 50);
+            ctx.fillStyle = "white";
+            ctx.font = "15px Liliita";
+            ctx.textAlign = "center";
+            ctx.fillText(`${Math.round(data.winRate)}%`, 725 + (indx * 60), 280);
+        });
+    }
+    else {
         ctx.fillStyle = "grey";
-        ctx.font = "40px Liliita";
-        ctx.fillText(rank.toString(), (i < 10) ? 80 : 70, i * 78);
+        ctx.font = "20px Liliita";
+        ctx.textAlign = "center";
+        ctx.fillText("STATS DATA NOT AVAILABLE", 985, 250);
+    }
 
-        //* Draw Icon Image
-        ctx.drawImage(icons[rank], 180, (i * 78) - 45, 55, 55);
-
-        //* Write name
-        ctx.fillStyle = member.nameColor.replace("0xff", "#");
-        ctx.font = `40px Liliita,Arial-Unicode-Ms,Nougat-ExtraBlack`;
-        ctx.fillText(member.name, 300, i * 78);
-
-        //* Write role
+    //* Draw most picked
+    ctx.fillStyle = "white";
+    ctx.font = "40px Liliita";
+    ctx.textAlign = "center";
+    ctx.fillText("Most Picked", 985, 350);
+    if (map.stats.length > 0) {
+        const mostPicked = await Promise.all(map.stats.sort((a, b) => b.useRate - a.useRate).slice(0, 10).map(async (stat) => {
+            return {
+                ...stat,
+                icon: (await getBrawlerIcon(stat.brawler))
+            }
+        }));
+        mostPicked.forEach((data, indx) => {
+            ctx.drawImage(data.icon, 700 + (indx * 60), 370, 50, 50);
+            ctx.fillStyle = "white";
+            ctx.font = "15px Liliita";
+            ctx.textAlign = "center";
+            ctx.fillText(`${Math.round(data.winRate)}%`, 725 + (indx * 60), 430);
+        });
+    } else {
         ctx.fillStyle = "grey";
-        ctx.font = "40px Liliita";
-        ctx.fillText(capitlizeString(member.role.replace(/([A-Z])/g, " $1")), 850, i * 78);
+        ctx.font = "20px Liliita";
+        ctx.textAlign = "center";
+        ctx.fillText("STATS DATA NOT AVAILABLE", 985, 400);
+    }
 
-        //* Write trophies
+    //* Draw best teams
+    ctx.fillStyle = "white";
+    ctx.font = "40px Liliita";
+    ctx.textAlign = "center";
+    ctx.fillText("Best Teams", 985, 500);
+
+    if (map.teamStats.length > 0) {
+
+        const teamStats = await Promise.all(map.teamStats.sort((a, b) => {
+            if (b.data.winRate === a.data.winRate) return 0;
+            return b.data.winRate < a.data.winRate ? -1 : 1;
+        }).slice(0, 8).map(async (team) => {
+            return {
+                ...team,
+                brawler1Icon: (await getBrawlerIcon(team.brawler1)),
+                brawler2Icon: (await getBrawlerIcon(team.brawler2)),
+                brawler3Icon: team.brawler3 ? (await getBrawlerIcon(team.brawler3)) : null
+            }
+        }));
+
+        ctx.fillStyle = "white";
+        ctx.font = "17px Liliita";
+        ctx.textAlign = "center";
+
+        //* First row
+        splitChunk(teamStats.slice(0, 4), 2).forEach((teamChunk, indx) => {
+            let i = 0;
+            ctx.fillText(`${Math.round(teamChunk[indx].data.winRate)}%`, 825 + 60, 585 + (indx * 90));
+            teamChunk.forEach(async (team: any) => {
+                ctx.drawImage(team.brawler1Icon, 800 + (i * 60), 520 + (indx * 90), 50, 50);
+                i++
+                ctx.drawImage(team.brawler2Icon, 800 + (i * 60), 520 + (indx * 90), 50, 50);
+                i++
+                if (team.brawler3Icon) {
+                    ctx.drawImage(team.brawler3Icon, 800 + (i * 60), 520 + (indx * 90), 50, 50);
+                }
+                i = 0;
+            });
+        });
+
+        //* Second row
+        splitChunk(teamStats.slice(4, 8), 2).forEach((teamChunk, indx) => {
+            let i = 0;
+            ctx.fillText(`${Math.round(teamChunk[indx].data.winRate)}%`, 1025 + 60, 585 + (indx * 90));
+            teamChunk.forEach(async (team: any) => {
+                ctx.drawImage(team.brawler1Icon, 1000 + (i * 60), 520 + (indx * 90), 50, 50);
+                i++
+                ctx.drawImage(team.brawler2Icon, 1000 + (i * 60), 520 + (indx * 90), 50, 50);
+                i++
+                if (team.brawler3Icon) ctx.drawImage(team.brawler3Icon, 1000 + (i * 60), 520 + (indx * 90), 50, 50);
+                i = 0;
+            });
+        });
+
+    }
+    else {
         ctx.fillStyle = "grey";
-        ctx.font = "40px Liliita,Arial-Unicode-Ms";
-        ctx.fillText(member.trophies.toLocaleString(), canvas.width - 200, i * 78);
-
-    });
+        ctx.font = "20px Liliita";
+        ctx.textAlign = "center";
+        ctx.fillText("TEAM DATA NOT AVAILABLE", 985, 550);
+    }
 
     return canvas.toBuffer();
 }

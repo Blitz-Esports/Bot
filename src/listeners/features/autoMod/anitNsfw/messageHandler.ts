@@ -11,7 +11,7 @@ const { antiNsfw } = config.features.automod;
 })
 export class UserEvent extends Listener {
     public async run(message: Message) {
-        if (!antiNsfw.enabled || message.system || message.author.bot || message.guildId !== antiNsfw.guildId) return;
+        if (!antiNsfw.enabled || message.system || message.author.bot || message.guildId !== antiNsfw.guildId || !message.attachments || message.attachments.size === 0) return;
         if (antiNsfw.excludedPermissions.length > 0 && message.member?.permissions.any([antiNsfw.excludedPermissions as PermissionResolvable])) return;
 
         const images = this.extractImages(message);

@@ -28,8 +28,6 @@ export class ReroleCommand extends Command {
         const clubData = await this.container.database.models.club.findOne({ where: { id: player.club.tag ?? "undefined" } });
         const allClubRoles = (await this.container.database.models.club.findAll({})).map((club) => club.toJSON().roleId).filter((roleId) => roleId !== null);
 
-        const newNickname = await member.setNickname(player.name).catch(() => null);
-
         let rolesToSet = member.roles.cache.filter((role) => ![...Object.values(verification.roles), ...allClubRoles].includes(role.id)).map((role) => role.id);
 
         const successEmbed = new MessageEmbed()
@@ -53,7 +51,6 @@ export class ReroleCommand extends Command {
             await member.roles.set(rolesToSet);
 
             successEmbed.setDescription([
-                `${newNickname?.displayName ? `Nickname changed to **${player.name}**.` : "Unable to change **Nickname**."}`,
                 `Associated with club: **${player.club.name}**.`,
                 `Club tag: **${player.club.tag}**.`,
                 `Roles changed: ${[...new Set(roles)].map((role) => `<@&${role}>`).join(", ")}.`,
@@ -71,7 +68,6 @@ export class ReroleCommand extends Command {
             await member.roles.set(rolesToSet);
 
             successEmbed.setDescription([
-                `${newNickname?.displayName ? `Nickname changed to **${player.name}**.` : "Unable to change **Nickname**."}`,
                 `Associated with club: **${player.club.name || "None"}**.`,
                 `Club tag: **${player.club.tag || "None"}**.`,
                 `Roles changed: ${roles.map((role) => `<@&${role}>`).join(", ")}.`,

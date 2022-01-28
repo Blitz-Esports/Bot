@@ -12,7 +12,7 @@ const { music } = config.features;
 })
 export class UserEvent extends Listener {
     public run(oldState: VoiceState, newState: VoiceState) {
-        if (newState.member?.user.bot || newState.channelId === oldState.channelId) return;
+        if (newState.member?.user.bot || newState.channelId === oldState.channelId || !music.enabled) return;
         const queue = this.container.music.getQueue(newState);
         if (!queue) return;
 
