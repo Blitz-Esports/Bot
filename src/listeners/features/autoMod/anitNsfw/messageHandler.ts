@@ -19,7 +19,7 @@ export class UserEvent extends Listener {
             const nsfwDetectedInImages = images.map(async (image) => { return await detectNsfw(image) });
             const resolvedResponse = await Promise.all(nsfwDetectedInImages);
             const nsfwResponse = resolvedResponse.filter((response) => response !== null);
-            if (nsfwResponse.length > 0 && nsfwResponse.some((res) => res?.isHentai || res?.isPorn === true)) {
+            if (nsfwResponse.length > 0 && nsfwResponse.some((res) => res?.isPorn === true)) {
                 this.container.client.emit(antiNsfw.events.NsfwDetect, message, nsfwResponse);
             }
         }
