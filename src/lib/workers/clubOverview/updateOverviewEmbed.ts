@@ -1,7 +1,7 @@
 import { container } from "@sapphire/framework";
 import { InteractionCollector, MessageEmbed, TextChannel } from "discord.js";
 import config from "../../../config";
-import { brawlstarsEmojis, getClub } from "../../api/brawlstars";
+import { brawlstarsEmojis, getClub } from "../../api/brawlstars/brawlstars";
 import { buildOverviewEmbed } from "./buildOverviewEmbed";
 import { list } from "./modules";
 
@@ -22,7 +22,7 @@ export const updateOverviewEmbed = async () => {
                     if (message) await message.edit(payload);
                 }
             });
-        } catch (e) { console.log(e) }
+        } catch (e) { }
     }, clubOverview.updateInterval);
 
     selectClubMenuCollector(channel);
@@ -52,7 +52,7 @@ const selectClubMenuCollector = async (channel: TextChannel) => {
             .addField(`Top Presidents (${list(club, "vicePresident").length} + 1)`, list(club, "vicePresident").join("\n"), true)
 
         const graphEmbed = new MessageEmbed()
-            .setImage(`https://share.brawlify.com/club-graph/${club.tag.replace("#", "")}?${Date.now()}`)
+            .setImage(`${config.server.host}/club/graph/${club.tag.replace("#", "")}?${Date.now()}`)
             .setFooter({ text: "Graph Data Provided by BrawlAPI", iconURL: `https://cdn.brawlify.com/front/Star.png` })
             .setTimestamp();
 

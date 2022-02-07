@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior } from '@sapphire/framework';
 import { ColorResolvable, CommandInteraction, MessageEmbed, TextChannel } from 'discord.js';
-import {MessageLinkRegex} from "@sapphire/discord-utilities";
+import { MessageLinkRegex } from "@sapphire/discord-utilities";
 import moment from 'moment';
 import { nanoid } from 'nanoid';
 import { failEmbed, successEmbed } from '../../lib/constants/embed';
@@ -80,21 +80,21 @@ export class DatabasePlayerCommand extends Command {
             if (!data || data === {}) return interaction.reply({ embeds: [failEmbed(`You don't have a session open. Run \`/${this.name} create\` to start a new embed builder session.`)] });
 
             const messageUrl = interaction.options.getString("message-url") ?? "null";
-            if(!MessageLinkRegex.test(messageUrl))return interaction.reply({embeds: [failEmbed("You need to specify a valid message url.")]});
+            if (!MessageLinkRegex.test(messageUrl)) return interaction.reply({ embeds: [failEmbed("You need to specify a valid message url.")] });
 
             const messageData = MessageLinkRegex.exec(messageUrl);
-            if(!messageData?.groups) return interaction.reply({embeds: [failEmbed("You need to specify a valid message url.")]});
+            if (!messageData?.groups) return interaction.reply({ embeds: [failEmbed("You need to specify a valid message url.")] });
 
             const channel = await this.container.client.channels.fetch(messageData.groups.channelId) as TextChannel | null;
-            if(!channel) return interaction.reply({embeds: [failEmbed("I don't have access to the message text channel.")]});
+            if (!channel) return interaction.reply({ embeds: [failEmbed("I don't have access to the message text channel.")] });
 
             const oldMessage = await channel.messages.fetch(messageData.groups.messageId);
-            if(!oldMessage) return interaction.reply({embeds: [failEmbed("Unable to fetch the message.")]});
-            else if(oldMessage.author.id !== oldMessage.guild?.me?.id)return interaction.reply({embeds: [failEmbed("That message is not sent by me.")]});
+            if (!oldMessage) return interaction.reply({ embeds: [failEmbed("Unable to fetch the message.")] });
+            else if (oldMessage.author.id !== oldMessage.guild?.me?.id) return interaction.reply({ embeds: [failEmbed("That message is not sent by me.")] });
 
             await oldMessage.edit({ content: data.content, embeds: Object.keys(data.embed ?? {}).length > 0 ? [new MessageEmbed(data.embed)] : null });
             await interaction.reply({ embeds: [successEmbed(`Updated the embed in ${channel.toString()}. [View edited message](${oldMessage.url}).`)] });
-        
+
         }
 
         return;
@@ -161,7 +161,7 @@ export class DatabasePlayerCommand extends Command {
 
             },
             {
-                guildIds: [this.container.config.bot.guilds.dev],
+                guildIds: [this.container.config.bot.guilds.main],
                 behaviorWhenNotIdentical: RegisterBehavior.Overwrite
             }
         );

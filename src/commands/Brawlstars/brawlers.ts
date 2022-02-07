@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior } from '@sapphire/framework';
 import type { CommandInteraction, MessageOptions } from 'discord.js';
-import { getPlayer, APlayer, generateBrawlerListCard } from '../../lib/api/brawlstars';
+import { getPlayer, APlayer, generateBrawlerListCard } from '../../lib/api/brawlstars/brawlstars';
 import { failEmbed } from '../../lib/constants/embed';
 
 @ApplyOptions<CommandOptions>({

@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior } from '@sapphire/framework';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { AClub, brawlstarsEmojis, getClub, getPlayer } from '../../lib/api/brawlstars';
+import { AClub, brawlstarsEmojis, getClub, getPlayer } from '../../lib/api/brawlstars/brawlstars';
 import { failEmbed } from '../../lib/constants/embed';
 
 @ApplyOptions<CommandOptions>({
@@ -24,7 +24,6 @@ export class clubCommand extends Command {
 
             const club = await getClub(interaction.options.getString("tag") as string);
             if (!club) return interaction.editReply({ embeds: [failEmbed("Unable to find the stats of the club. The club's tag is invalid or the game is under maintenance.")] });
-            console.log(club)
             return interaction.editReply({ embeds: this.makeEmbed(club) });
         }
         else if (interaction.options.get("user", false)) {
@@ -71,7 +70,7 @@ export class clubCommand extends Command {
             .addField(`Top Presidents (${this.list(clubData, "vicePresident").length} + 1)`, this.list(clubData, "vicePresident").join("\n"), true)
 
         const graphEmbed = new MessageEmbed()
-            .setImage(`https://share.brawlify.com/club-graph/${clubData.tag.replace("#", "")}?${Date.now()}`)
+            .setImage(`${this.container.config.server.host}/club/graph/${clubData.tag.replace("#", "")}?${Date.now()}`)
             .setFooter({ text: "Graph Data Provided by BrawlAPI", iconURL: `https://cdn.brawlify.com/front/Star.png` })
             .setTimestamp();
 

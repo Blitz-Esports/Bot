@@ -27,6 +27,7 @@ export class ReadyEvent extends Listener {
         this.printStoreDebugInformation();
 
         //* Load modules
+        this.setStatus();
         await this.initializeDatabase();
         loadWorkers();
         discordLogs(this.container.client);
@@ -69,6 +70,10 @@ export class ReadyEvent extends Listener {
         this.container.stores.get('listeners').loadAll();
     }
 
+    private setStatus() {
+        this.container.client.user?.setActivity(this.container.config.bot.status.text, { type: "PLAYING" });
+    }
+
     private async loadMusicModule() {
 
         if (this.container.config.features.music.enabled) {
@@ -79,7 +84,8 @@ export class ReadyEvent extends Listener {
                 nsfw: false,
                 plugins: [new SpotifyPlugin({ emitEventsAfterFetching: true }), new SoundCloudPlugin()],
                 ytdlOptions: {
-                    highWaterMark: 1e+8
+                    highWaterMark: 1e+8,
+                    quality: "highestaudio"
                 }
             });
             this.container.client.emit(this.container.config.features.music.events.Ready);

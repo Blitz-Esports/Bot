@@ -8,7 +8,7 @@ export const metaTagComponent = (messageCollection: Collection<string, Message>,
 
 	const tags = [
 		`<meta property="og:type" content="website">`,
-		`<meta property="og:site_name" content="Blitz Esports - Server">`,
+		`<meta property="og:site_name" content="BLITZ™ Esports | Transcript">`,
 		`<meta property="og:title" content="Transcript - ${id ?? message.channelId}">`,
 		`<meta property="og:description" content="${user ? `This transcript is owned by ${user.tag} (${user.id}).` : ''}\nThere are ${messageCollection.size
 		} messages in this transcript.">`,

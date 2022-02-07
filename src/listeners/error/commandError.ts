@@ -12,11 +12,12 @@ export class ErrorEvent extends Listener {
     public async run(error: any, context: ChatInputCommandErrorPayload) {
 
         const uId = nanoid();
-
-        await this.container.database.models.bin.create({
-            id: uId,
-            data: error.stack
-        });
+        try {
+            await this.container.database.models.bin.create({
+                id: uId,
+                data: error.stack
+            });
+        } catch (e) { }
 
         context.interaction[(context.interaction.replied ? true : context.interaction.deferred) ? "editReply" : "reply"]({
             embeds: [

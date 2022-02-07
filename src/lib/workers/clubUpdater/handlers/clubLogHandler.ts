@@ -1,4 +1,4 @@
-import type { AClub } from "../../../api/brawlstars";
+import type { AClub } from "../../../api/brawlstars/brawlstars";
 
 export const clubLogHandler = async (dbClub: IClub, apiClub: AClub) => {
     let clubLogs: ClubLogs[] = [];
@@ -59,11 +59,12 @@ export const clubLogHandler = async (dbClub: IClub, apiClub: AClub) => {
         });
     }
 
+    /*
     const members = apiClub.members;
     const dbMembers = dbClub.rawData.members;
 
-    const removedMembers = members.filter(m => !dbMembers.some(dbm => dbm.tag === m.tag));
-    const addedMembers = dbMembers.filter(dbm => !members.some(m => m.tag === dbm.tag));
+    const removedMembers = dbMembers.filter(m => members.some(n => n.tag === m.tag));
+    const addedMembers = members.filter(m => dbMembers.some(n => n.tag === m.tag));
 
     addedMembers.forEach(m => {
         clubLogs.push({
@@ -97,6 +98,7 @@ export const clubLogHandler = async (dbClub: IClub, apiClub: AClub) => {
             timestamp: new Date().toISOString()
         });
     });
+    */
 
     const newRoles = apiClub.members.filter((m) => m.role !== dbClub.rawData.members.find(dbm => dbm.tag === m.tag)?.role);
     newRoles.forEach((m) => {
@@ -121,8 +123,7 @@ export const clubLogHandler = async (dbClub: IClub, apiClub: AClub) => {
     });
 
     const output = [...clubLogs, ...dbClub.clubLogs].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-    output; //TODO: Renable this with better code
-    return [];
+    return output;
 }
 
 interface IClub {

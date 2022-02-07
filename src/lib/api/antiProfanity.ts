@@ -33,7 +33,6 @@ const fetchApi = async function (content: string, languages: string[] = ["en"], 
         queue.shift();
         return res;
     } catch (e) {
-        console.log(e)
         queue.shift();
         return null;
     }

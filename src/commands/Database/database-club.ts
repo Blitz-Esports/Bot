@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior } from '@sapphire/framework';
 import type { CommandInteraction } from 'discord.js';
-import { getClub } from '../../lib/api/brawlstars';
+import { getClub } from '../../lib/api/brawlstars/brawlstars';
 import { failEmbed, loadingEmbed, successEmbed } from '../../lib/constants/embed';
 
 @ApplyOptions<CommandOptions>({

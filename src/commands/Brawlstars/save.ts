@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior } from '@sapphire/framework';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import config from '../../config';
-import { getPlayer, AClub } from '../../lib/api/brawlstars';
+import { getPlayer, AClub, encodeTag } from '../../lib/api/brawlstars/brawlstars';
 import { failEmbed } from '../../lib/constants/embed';
 
 const { verification } = config.features;
@@ -20,12 +20,12 @@ export class SaveCommand extends Command {
         if (!member) return interaction.editReply({ embeds: [failEmbed("Unable to resolve member from the interaction.")] });
 
         const user = await this.container.database.models.player.findOne({ where: { id: member.user.id } });
-        if (user) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, you already has a Brawl Stars tag saved with name: **${user.toJSON().name}** (${user.toJSON().tag}).\nIf you want to refresh your roles run \`/rerole\` command.`)] });
+        if (user) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, you already have a Brawl Stars tag saved with name: **${user.toJSON().name}** (${user.toJSON().tag}).\nIf you want to refresh your roles run \`/rerole\` command.`)] });
 
         const player = await getPlayer(interaction.options.get("tag")?.value as string);
         if (!player) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, could not find a Brawl Stars profile with the tag: **${interaction.options.get("tag")?.value}**.`)] });
 
-        const clubData = await this.container.database.models.club.findOne({ where: { id: player.club.tag ?? "unknown" } });
+        const clubData = await this.container.database.models.club.findOne({ where: { id: encodeTag(player.club.tag , "STRING") ?? "unknown" } });
 
         let rolesToSet = member.roles.cache.filter((role) => ![...Object.values(verification.roles)].includes(role.id)).map((role) => role.id);
 
@@ -48,7 +48,7 @@ export class SaveCommand extends Command {
                 verification.roles.default,
                 verification.roles.member,
                 verification.roles[clubMember?.role ?? "member"],
-                clubData.toJSON().roleId
+                clubData.toJSON().roleId ?? verification.roles.default
             ];
             rolesToSet.push(...roles);
             rolesToSet = [...new Set(rolesToSet)];

@@ -1,7 +1,7 @@
 import { container } from "@sapphire/framework"
 import { MessageActionRow, MessageEmbed, MessageOptions, MessageSelectMenu } from "discord.js";
 import config from "../../../config";
-import { AClub, brawlstarsEmojis } from "../../api/brawlstars";
+import { AClub, brawlstarsEmojis } from "../../api/brawlstars/brawlstars";
 import { splitChunk } from "./modules";
 
 const { clubOverview } = config.features;

@@ -42,7 +42,6 @@ export class UserRoute extends Route {
             this.container.client.emit(this.container.config.features.embedBuilder.events.EmbedCreate, body, user);
             return { status: true, message: `Sent the embed to ${user.tag}` };
         } catch (e) {
-            console.log(e)
             return { status: false, message: "Unable to send the message" };
         }
 

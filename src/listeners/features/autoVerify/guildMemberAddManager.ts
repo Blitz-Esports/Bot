@@ -11,10 +11,11 @@ const { verification } = config.features;
 export class UserEvent extends Listener {
     public async run(member: GuildMember) {
         if (member.guild.id !== verification.guildId) return;
-        const user = await this.container.database.models.player.findOne({ where: { id: member.id } });
+        const user = await this.container.database.models.player.findOne({ where: { id: member.user.id } });
+      
         if (!user) return;
         else {
-            this.container.client.emit(verification.events.GiveRoles, member, user);
+            this.container.client.emit(verification.events.GiveRoles, member, user.toJSON());
         }
     }
 }

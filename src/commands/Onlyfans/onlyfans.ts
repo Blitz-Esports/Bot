@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior } from '@sapphire/framework';
 import axios from 'axios';
-import { ColorResolvable, CommandInteraction, MessageEmbed } from 'discord.js';
+import { ColorResolvable, CommandInteraction, Message, MessageContextMenuInteraction, MessageEmbed } from 'discord.js';
 import moment from 'moment';
 import { nanoid } from 'nanoid';
 import { upload } from '../../lib/api/onlyfans';
@@ -44,17 +44,34 @@ export class DatabasePlayerCommand extends Command {
             const account = await this.fetchAccount(interaction.user.id);
             if (!account) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, you don't have the BLITZ OnlyFans account linked to your discord account.`)] });
 
-            const url = interaction.options.getString("url") as string;
+            const url = interaction.options.getString("image-url") as string;
             if (!(await this.validateURL(url))) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, the url you provided is not valid.\nSupported file formats: ${this.validFormats.join(", ")}`)] });
 
             const uploadData = await upload(url, account);
             if (!uploadData || !uploadData.status) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, unable to post the data to the api. Please try again later.`)] });
 
-            await interaction.editReply({ content: `Uploaded the file to your BLITZ Only Fans account.\nURL: ${uploadData.url}` });
+            await interaction.editReply({ content: `Uploaded the file to your BLITZ Only Fans account.\nURL: ${uploadData.share}` });
 
         }
 
         return;
+    }
+
+    public override async contextMenuRun(interaction: MessageContextMenuInteraction) {
+        await interaction.deferReply({ ephemeral: true });
+
+        const account = await this.fetchAccount(interaction.user.id);
+        if (!account) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, you don't have the BLITZ OnlyFans account linked to your discord account.`)] });
+
+        const imageUrls = await this.extractImages(interaction.targetMessage as Message);
+        if (imageUrls.length === 0) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, no images were found in the message.`)] });
+
+        const uploadData = (await Promise.all(imageUrls.map((url) => upload(url, account)))).filter((data) => data !== null && data.status);
+        if (uploadData.length === 0) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, unable to post the data to the api. Please try again later.`)] });
+
+        return interaction.editReply({
+            content: `Uploaded the file to your BLITZ Only Fans account.\nURL: ${uploadData.filter((data) => data !== null).map((data) => data?.share).join("\n")}`
+        })
     }
 
     private async fetchAccount(userId: string) {
@@ -66,18 +83,29 @@ export class DatabasePlayerCommand extends Command {
         return account ? account.toJSON() : null;
     }
 
-    readonly validFormats = ["jpg", "png", "gif", "jpeg"];
+    private readonly validFormats = ["jpg", "png", "gif", "jpeg"];
 
     private async validateURL(url: string) {
         try {
             const link = new URL(url);
-            if (!this.validFormats.includes(link.pathname.split(".").pop() ?? "null")) return false;
-            const file = await axios.get(url);
-            if (file.status !== 200) return false;
+            const res = await axios.get(link.toString());
+            if (res.status !== 200) return false;
+            const contentType = res.headers["content-type"];
+            if (!contentType) return false;
+            if (!contentType.startsWith("image/")) return false;
             return true;
         } catch (e) {
             return false;
         }
+    }
+
+    private async extractImages(message: Message) {
+        const imageRegex = new RegExp(/\b(https?:\/\/\S+(?:png|jpe?g|gif)\S*)\b/igm);
+        const contentMatches = message.content.match(imageRegex) ?? [];
+        const attachments = message.attachments.filter((attachment) => attachment.height !== null && attachment.width !== null).map((attachment) => attachment.proxyURL);
+        const embeds = message.embeds.filter((embed) => embed.type === 'image').map((embed) => embed.url);
+        const urls = [...new Set([...attachments, ...embeds, ...contentMatches])] as string[];
+        return await Promise.all(urls.filter((url) => this.validateURL(url)));
     }
 
     public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
@@ -105,8 +133,8 @@ export class DatabasePlayerCommand extends Command {
                         type: "SUB_COMMAND",
                         options: [
                             {
-                                name: "url",
-                                description: "The url of the file to upload.",
+                                name: "image-url",
+                                description: "The url of the image to upload.",
                                 type: "STRING",
                                 required: true
                             }
@@ -116,7 +144,18 @@ export class DatabasePlayerCommand extends Command {
 
             },
             {
-                guildIds: [this.container.config.bot.guilds.dev],
+                guildIds: [this.container.config.bot.guilds.main],
+                behaviorWhenNotIdentical: RegisterBehavior.Overwrite
+            }
+        );
+
+        registry.registerContextMenuCommand(
+            {
+                name: `${this.name} upload`,
+                type: "MESSAGE"
+            },
+            {
+                guildIds: [this.container.config.bot.guilds.main],
                 behaviorWhenNotIdentical: RegisterBehavior.Overwrite
             }
         );

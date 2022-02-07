@@ -15,7 +15,7 @@ export class UserEvent extends Listener {
     public async run(message: Message, _response: PerspectiveAPIResponse) {
 
         await createWarn(message.author.id, message.guild?.me?.id || "unknown", `[AutoMod] Inappropriate language`);
-        await message.react(antiProfanity.emojis.detect);
+        // await message.react(antiProfanity.emojis.detect);
 
     }
 

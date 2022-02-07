@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior } from '@sapphire/framework';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import config from '../../config';
-import { getPlayer, AClub } from '../../lib/api/brawlstars';
+import { getPlayer, AClub, encodeTag } from '../../lib/api/brawlstars/brawlstars';
 import { failEmbed } from '../../lib/constants/embed';
 
 const { verification } = config.features;
@@ -25,7 +25,7 @@ export class ReroleCommand extends Command {
         const player = await getPlayer(user.toJSON().tag);
         if (!player) return interaction.editReply({ embeds: [failEmbed(`${interaction.user.toString()}, could not find a Brawl Stars profile with the tag: **${user.toJSON().tag}**.`)] });
 
-        const clubData = await this.container.database.models.club.findOne({ where: { id: player.club.tag ?? "undefined" } });
+        const clubData = await this.container.database.models.club.findOne({ where: { id: encodeTag(player.club.tag , "STRING") ?? "undefined" } });
         const allClubRoles = (await this.container.database.models.club.findAll({})).map((club) => club.toJSON().roleId).filter((roleId) => roleId !== null);
 
         let rolesToSet = member.roles.cache.filter((role) => ![...Object.values(verification.roles), ...allClubRoles].includes(role.id)).map((role) => role.id);

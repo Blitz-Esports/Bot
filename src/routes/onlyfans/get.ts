@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApiRequest, ApiResponse, methods, Route, RouteOptions } from '@sapphire/plugin-api';
 
-const REDIRECT_URL = "http://localhost/auth";
+const REDIRECT_URL = "https://onlyfans.blitz-esports.ml/auth";
 
 @ApplyOptions<RouteOptions>({
     name: "onlyfans:get",

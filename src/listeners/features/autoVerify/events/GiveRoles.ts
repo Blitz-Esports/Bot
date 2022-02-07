@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import type { GuildMember } from 'discord.js';
 import config from '../../../../config';
-import { getPlayer, AClub } from '../../../../lib/api/brawlstars';
+import { getPlayer, AClub, encodeTag } from '../../../../lib/api/brawlstars/brawlstars';
 const { verification } = config.features;
 
 @ApplyOptions<ListenerOptions>({
@@ -14,7 +14,7 @@ export class UserEvent extends Listener {
         const player = await getPlayer(user.tag);
         if (!player) return;
 
-        const clubData = await this.container.database.models.club.findOne({ where: { id: player.club.tag } });
+        const clubData = await this.container.database.models.club.findOne({ where: { id: encodeTag(player.club.tag , "STRING") ?? "null" } });
         const allClubRoles = (await this.container.database.models.club.findAll({})).map((club) => club.toJSON().roleId).filter((roleId) => roleId !== null);
 
         const rolesToSet = member.roles.cache.filter((role) => ![...Object.values(verification.roles), ...allClubRoles].includes(role.id)).map((role) => role.id);
@@ -30,14 +30,14 @@ export class UserEvent extends Listener {
                 clubData.toJSON().roleId ?? verification.roles.default
             ];
             rolesToSet.push(...roles);
-            await member.roles.set(rolesToSet);
+            await member.roles.set([...new Set(rolesToSet)]);
         }
         else {
             const roles = [
                 verification.roles.default
             ];
             rolesToSet.push(...roles);
-            await member.roles.set(rolesToSet);
+            await member.roles.set([...new Set(rolesToSet)]);
         }
 
     }

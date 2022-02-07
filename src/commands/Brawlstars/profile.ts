@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, Command, CommandOptions, RegisterBehavior } from '@sapphire/framework';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import config from '../../config';
-import { brawlstarsEmojis, getPlayer, APlayer } from '../../lib/api/brawlstars';
+import { brawlstarsEmojis, getPlayer, APlayer } from '../../lib/api/brawlstars/brawlstars';
 import { failEmbed } from '../../lib/constants/embed';
 
 @ApplyOptions<CommandOptions>({
@@ -51,7 +51,7 @@ export class UserCommand extends Command {
         const embed = new MessageEmbed()
             .setColor(`#${apiResponse.nameColor.replace('0xff', '')}`)
             .setAuthor({ name: `${apiResponse.name} (${apiResponse.tag})`, iconURL: `https://cdn.brawlify.com/profile/${apiResponse.icon.id}.png`, url: `https://brawlify.com/stats/profile/${apiResponse.tag.replace("#", "")}` })
-            .setImage(`https://share.brawlify.com/player-graph/${apiResponse.tag.replace('#', '')}?${Date.now()}`)
+            .setImage(`${this.container.config.server.host}/player/graph/${apiResponse.tag.replace('#', '')}?${Date.now()}`)
             .addFields([
                 {
                     name: 'Trophies',

@@ -1,4 +1,4 @@
-import { AClub, brawlstarsEmojis } from "../../api/brawlstars";
+import { AClub, brawlstarsEmojis } from "../../api/brawlstars/brawlstars";
 
 export const splitChunk = (array: any[], chunk?: number) => {
     const inputArray = array;
