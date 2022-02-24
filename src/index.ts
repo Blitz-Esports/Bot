@@ -12,7 +12,15 @@ const client = new SapphireClient({
     shards: 'auto',
     intents: config.bot.intents as BitFieldResolvable<IntentsString, number>,
     partials: config.bot.partials as PartialTypes[],
-    api: config.server.api
+    api: {
+        ...config.server.api,
+        auth: {
+            cookie: process.env.DISCORD_AUTH_COOKIE,
+            id: process.env.CLIENT_ID ?? "",
+            secret: process.env.DISCORD_AUTH_SECRET ?? "",
+            redirect: process.env.DISCORD_AUTH_REDIRECT ?? "",
+        }
+    }
 });
 
 const main = async () => {

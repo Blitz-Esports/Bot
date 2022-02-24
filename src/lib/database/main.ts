@@ -9,6 +9,7 @@ import { PlayerModel } from "./models/PlayerModel";
 import { WarnModel } from "./models/WarnModel";
 import { TokenModel } from "./models/TokenModel";
 import { OnlyFanModel } from "./models/OnlyFanModel";
+import { LevelModel } from "./models/LevelModel";
 
 export const initializeDatabase = async () => {
     const database = new Sequelize(config.database.database, config.database.user, config.database.password, {
@@ -28,8 +29,9 @@ export const initializeDatabase = async () => {
     database.define("club", ClubModel);
     database.define("player", PlayerModel);
     database.define("warn", WarnModel);
-    database.define("token" , TokenModel);
-    database.define("onlyfan" , OnlyFanModel);
+    database.define("token", TokenModel);
+    database.define("onlyfan", OnlyFanModel);
+    database.define("level", LevelModel);
 
     //* Sync Models
     await database.sync();

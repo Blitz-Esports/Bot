@@ -22,5 +22,9 @@ export const TokenModel: ModelAttributes = {
             return this.setDataValue("metaData", JSON.stringify(value));
         },
         defaultValue: "{}"
+    },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 };

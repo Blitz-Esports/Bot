@@ -8,6 +8,7 @@ import type { Sequelize } from 'sequelize/dist';
 import { initializeDatabase } from '../lib/database/main';
 import { loadWorkers } from '../lib/workers/loadWorkers';
 import discordLogs from "discord-logs";
+import type { PresenceStatusData } from 'discord.js';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -71,7 +72,8 @@ export class ReadyEvent extends Listener {
     }
 
     private setStatus() {
-        this.container.client.user?.setActivity(this.container.config.bot.status.text, { type: "PLAYING" });
+        this.container.client.user?.setStatus(this.container.config.bot.status.status as PresenceStatusData);
+        if (this.container.config.bot.status.activity) this.container.client.user?.setActivity(this.container.config.bot.status.activity);
     }
 
     private async loadMusicModule() {

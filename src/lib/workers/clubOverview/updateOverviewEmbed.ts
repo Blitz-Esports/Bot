@@ -52,9 +52,7 @@ const selectClubMenuCollector = async (channel: TextChannel) => {
             .addField(`Top Presidents (${list(club, "vicePresident").length} + 1)`, list(club, "vicePresident").join("\n"), true)
 
         const graphEmbed = new MessageEmbed()
-            .setImage(`${config.server.host}/club/graph/${club.tag.replace("#", "")}?${Date.now()}`)
-            .setFooter({ text: "Graph Data Provided by BrawlAPI", iconURL: `https://cdn.brawlify.com/front/Star.png` })
-            .setTimestamp();
+            .setImage(`${config.server.host}/club/${club.tag.replace("#", "")}/graph?${Date.now()}`);
 
         interaction.reply({ embeds: [infoEmbed, graphEmbed], ephemeral: true });
     });

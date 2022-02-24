@@ -51,7 +51,7 @@ export class UserCommand extends Command {
         const embed = new MessageEmbed()
             .setColor(`#${apiResponse.nameColor.replace('0xff', '')}`)
             .setAuthor({ name: `${apiResponse.name} (${apiResponse.tag})`, iconURL: `https://cdn.brawlify.com/profile/${apiResponse.icon.id}.png`, url: `https://brawlify.com/stats/profile/${apiResponse.tag.replace("#", "")}` })
-            .setImage(`${this.container.config.server.host}/player/graph/${apiResponse.tag.replace('#', '')}?${Date.now()}`)
+            .setImage(`${this.container.config.server.host}/player/${apiResponse.tag.replace('#', '')}/graph?${Date.now()}`)
             .addFields([
                 {
                     name: 'Trophies',
@@ -110,7 +110,7 @@ export class UserCommand extends Command {
 
         const discordAccounts = (await this.container.database.models.player.findAll({ where: { tag: apiResponse.tag } })).map((player) => player.toJSON());
         if (discordAccounts.length > 0) {
-            embed.addField('Discord Account(s)', `${config.default.emojis.discord} ${discordAccounts.map((account) => `<@${account.id}>`).join(', ')}`, true);
+            embed.addField('Discord Account(s)', `${config.default.emojis.discord} ${discordAccounts.map((account) => this.container.client.users.cache.get(account.id)?.tag ?? account.id).join(', ')}`, true);
         }
 
         return { embeds: [embed] };

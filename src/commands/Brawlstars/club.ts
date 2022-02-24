@@ -70,9 +70,7 @@ export class clubCommand extends Command {
             .addField(`Top Presidents (${this.list(clubData, "vicePresident").length} + 1)`, this.list(clubData, "vicePresident").join("\n"), true)
 
         const graphEmbed = new MessageEmbed()
-            .setImage(`${this.container.config.server.host}/club/graph/${clubData.tag.replace("#", "")}?${Date.now()}`)
-            .setFooter({ text: "Graph Data Provided by BrawlAPI", iconURL: `https://cdn.brawlify.com/front/Star.png` })
-            .setTimestamp();
+            .setImage(`${this.container.config.server.host}/club/${clubData.tag.replace("#", "")}/graph?${Date.now()}`);
 
         return [infoEmbed, graphEmbed];
     }

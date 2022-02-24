@@ -4,7 +4,7 @@ import { generateGraph } from '../../lib/api/brawlstars/brawlstars';
 
 @ApplyOptions<RouteOptions>({
     name: 'player:graph',
-    route: 'player/graph/:id'
+    route: 'player/:id/graph'
 })
 export class UserRoute extends Route {
     public async [methods.GET](request: ApiRequest, response: ApiResponse) {

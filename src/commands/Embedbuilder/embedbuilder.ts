@@ -24,7 +24,8 @@ export class DatabasePlayerCommand extends Command {
             await this.container.database.models.token.create({
                 id: token,
                 userId: interaction.user.id,
-                expires: moment().add(this.container.config.features.embedBuilder.tokenExpireTimeout, "milliseconds").toDate()
+                expires: moment().add(this.container.config.features.embedBuilder.tokenExpireTimeout, "milliseconds").toDate(),
+                type: this.container.config.features.embedBuilder.tokenType
             });
 
             await interaction.user.send({

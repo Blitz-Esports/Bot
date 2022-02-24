@@ -22,29 +22,32 @@ export class UserRoute extends Route {
         if (!token) return false;
         const fetchToken = await this.container.database.models.token.findOne({ where: { id: token } });
         if (!fetchToken || new Date(fetchToken.toJSON().expires).getTime() < new Date().getTime()) return false;
-        return fetchToken.toJSON().userId;
+        return fetchToken.toJSON();
     }
 
-    private async emitEvent(body: Body, userId: string) {
+    private async emitEvent(body: Body, validation: any) {
+        const tokenType = validation.type;
 
-        try {
-            const user = await this.container.client.users.fetch(userId);
-            if (!user) return { status: false, message: "Unable to find the user" };
+        if (tokenType === this.container.config.features.embedBuilder.tokenType) {
+            try {
+                const user = await this.container.client.users.fetch(validation.userId);
+                if (!user) return { status: false, message: "Unable to find the user" };
 
-            await this.container.database.models.token.update({
-                metaData: body.data
-            }, {
-                where: {
-                    id: body.token
-                }
-            });
+                await this.container.database.models.token.update({
+                    metaData: body.data
+                }, {
+                    where: {
+                        id: body.token
+                    }
+                });
 
-            this.container.client.emit(this.container.config.features.embedBuilder.events.EmbedCreate, body, user);
-            return { status: true, message: `Sent the embed to ${user.tag}` };
-        } catch (e) {
-            return { status: false, message: "Unable to send the message" };
+                this.container.client.emit(this.container.config.features.embedBuilder.events.EmbedCreate, body, user);
+                return { status: true, message: `Sent the embed to ${user.tag}` };
+            } catch (e) {
+                return { status: false, message: "Unable to send the message" };
+            }
         }
-
+        return;
     }
 
 }
