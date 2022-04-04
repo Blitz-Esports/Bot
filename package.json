@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "@sapphire/prettier-config": "1.2.7",
-    "@sapphire/ts-config": "3.1.6",
+    "@sapphire/ts-config": "3.1.8",
     "@types/node": "16.11.11",
     "@types/validator": "^13.7.1",
     "@types/ws": "8.2.2",
