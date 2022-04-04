@@ -24,7 +24,7 @@
     "@distube/spotify": "^1.1.0",
     "@distube/yt-dlp": "^0.0.1",
     "@sapphire/async-queue": "^1.1.9",
-    "@sapphire/decorators": "^3.1.2",
+    "@sapphire/decorators": "^3.1.6",
     "@sapphire/discord-utilities": "^2.2.2",
     "@sapphire/discord.js-utilities": "^4.1.0",
     "@sapphire/fetch": "^2.0.3",
