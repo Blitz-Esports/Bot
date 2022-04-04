@@ -1,4 +1,4 @@
-![Blitz Bot Status](https://api.tke-esports.tk/api/website/status?url=https://bot.blitz-esports.ml)
+![Blitz Bot Status](https://bot-api.blitz-esports.ml/api/website/status?url=https://bot.blitz-esports.ml)
 
 # Blitz Bot
 
